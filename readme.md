@@ -22,6 +22,11 @@ Performance Benchmark
 - **Random Overwrite (1,000 ops + Batched Flush)**: `17 ms`
 - **Data Integrity Verification**: `PASSED (100% OK)`
 
-Usage Example
--------------
-See [`src/example/example.cpp`](file:///Volumes/External/Code/f/littlefs_v2/src/example/example.cpp) for a full usage and benchmark example.
+Examples & Projects
+-------------------
+1. **Asset Package Vault Demo (1,000 files)**: [`src/example/asset_vault_example.cpp`](file:///Volumes/External/Code/f/littlefs_v2/src/example/asset_vault_example.cpp)
+   Demonstrates creating, packing, directory scanning, and batch-updating 1,000 small files (JSON configs, textures, audio FX descriptors) inside a single `.vfs` package container.
+2. **Unit Test Suite**: [`src/example/vfs_tests.cpp`](file:///Volumes/External/Code/f/littlefs_v2/src/example/vfs_tests.cpp)
+   Complete unit test suite with 46 assertions passing across Memory & File backends.
+3. **Architecture Documentation**: [`docs/vfs_value_and_architecture.md`](file:///Volumes/External/Code/f/littlefs_v2/docs/vfs_value_and_architecture.md)
+   Commercial & technical value breakdown.
