@@ -11,11 +11,17 @@
 #include <codecvt>
 #include <locale>
 static inline int _wfopen_s(FILE** pFile, const wchar_t* filename, const wchar_t* mode) {
+    if (!pFile) return -1;
     std::wstring_convert<std::codecvt_utf8<wchar_t>> conv;
     std::string path = conv.to_bytes(filename);
     std::string m = conv.to_bytes(mode);
-    *pFile = fopen(path.c_str(), m.c_str());
-    return *pFile ? 0 : -1;
+    FILE* f = fopen(path.c_str(), m.c_str());
+    if (!f) {
+        *pFile = nullptr;
+        return -1;
+    }
+    *pFile = f;
+    return 0;
 }
 #endif
 

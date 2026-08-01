@@ -17,7 +17,7 @@ int lfs_file_rawopencfg(lfs_t* lfs, lfs_file_t* file,
     }
 
     // setup simple file details
-    int err;
+    int err = 0;
     file->cfg = cfg;
     file->flags = flags;
     file->pos = 0;
@@ -143,11 +143,12 @@ int lfs_file_rawopencfg(lfs_t* lfs, lfs_file_t* file,
         file->cache.buffer = (uint8_t*)file->cfg->buffer;
     }
     else {
-        file->cache.buffer = (uint8_t*)malloc(lfs->cfg->cache_size);
-        if (!file->cache.buffer) {
+        void* alloc_buf = malloc(lfs->cfg->cache_size);
+        if (!alloc_buf) {
             err = LFS_ERR_NOMEM;
             goto cleanup;
         }
+        file->cache.buffer = (uint8_t*)alloc_buf;
     }
 
     // zero to avoid information leak
@@ -181,8 +182,11 @@ int lfs_file_rawopencfg(lfs_t* lfs, lfs_file_t* file,
 
 cleanup:
     // clean up lingering resources
-
     file->flags |= LFS_F_ERRED;
+    if (file->cfg && !file->cfg->buffer && file->cache.buffer) {
+        free(file->cache.buffer);
+        file->cache.buffer = NULL;
+    }
 
     lfs_file_rawclose(lfs, file);
     return err;
@@ -203,8 +207,9 @@ int lfs_file_rawclose(lfs_t* lfs, lfs_file_t* file) {
     lfs_mlist_remove(lfs, (lfs_metadata_list_t*)file);
 
     // clean up memory
-    if (!file->cfg->buffer) {
+    if (file->cfg && !file->cfg->buffer && file->cache.buffer) {
         free(file->cache.buffer);
+        file->cache.buffer = NULL;
     }
 
     return err;

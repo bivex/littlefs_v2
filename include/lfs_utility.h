@@ -54,7 +54,7 @@ __forceinline int __builtin_popcountll(unsigned long long x)
 // bit position. If x is 0, the result is undefined.
 __forceinline int __builtin_ctzll(unsigned long long mask)
 {
-    unsigned long where;
+    unsigned long where = 0;
     // Search from LSB to MSB for first set bit.
     // Returns zero if no set bit is found.
 #if defined(_WIN64)
@@ -75,7 +75,7 @@ __forceinline int __builtin_ctzll(unsigned long long mask)
 }
 __forceinline int __builtin_ctzl(unsigned long mask)
 {
-    unsigned long where;
+    unsigned long where = 0;
     // Search from LSB to MSB for first set bit.
     // Returns zero if no set bit is found.
     if (_BitScanForward(&where, mask))
@@ -93,7 +93,7 @@ __forceinline int __builtin_ctz(unsigned int mask)
 // bit position. If x is 0, the result is undefined.
 __forceinline int __builtin_clzll(unsigned long long mask)
 {
-    unsigned long where;
+    unsigned long where = 0;
     // BitScanReverse scans from MSB to LSB for first set bit.
     // Returns 0 if no set bit is found.
 #if defined(_WIN64)
@@ -114,7 +114,7 @@ __forceinline int __builtin_clzll(unsigned long long mask)
 }
 __forceinline int __builtin_clzl(unsigned long mask)
 {
-    unsigned long where;
+    unsigned long where = 0;
     // Search from LSB to MSB for first set bit.
     // Returns zero if no set bit is found.
     if (_BitScanReverse(&where, mask))

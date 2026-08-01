@@ -202,7 +202,7 @@ int lfs_dir_traverse(lfs_t* lfs,
     lfs_dir_traverse_t stack[LFS_DIR_TRAVERSE_DEPTH - 1];
     size_t stack_index = 0;
 
-    int res;
+    int res = 0;
 
     // iterate over directory and attrs
     lfs_tag_t tag;

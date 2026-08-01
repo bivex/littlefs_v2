@@ -95,13 +95,15 @@ static int lfs_init(lfs_t* lfs, lfs_config_t* cfg) {
     }
     else {
 
-        lfs->free.buffer = (uint64_t*)malloc(lfs->cfg->lookahead_size);
+        void* alloc_buf = malloc(lfs->cfg->lookahead_size);
 
-        if (!lfs->free.buffer) {
+        if (!alloc_buf) {
 
             err = LFS_ERR_NOMEM;
             goto cleanup;
         }
+
+        lfs->free.buffer = (uint64_t*)alloc_buf;
     }
 
     // check that the size limits are sane
@@ -140,6 +142,20 @@ static int lfs_init(lfs_t* lfs, lfs_config_t* cfg) {
     return LFS_ERR_OK;
 
 cleanup:
+    if (lfs->cfg) {
+        if (!lfs->cfg->read_buffer && lfs->read_cache.buffer) {
+            free(lfs->read_cache.buffer);
+            lfs->read_cache.buffer = NULL;
+        }
+        if (!lfs->cfg->write_buffer && lfs->write_cache.buffer) {
+            free(lfs->write_cache.buffer);
+            lfs->write_cache.buffer = NULL;
+        }
+        if (!lfs->cfg->lookahead_buffer && lfs->free.buffer) {
+            free(lfs->free.buffer);
+            lfs->free.buffer = NULL;
+        }
+    }
     lfs_deinit(lfs);
     return err;
 }
@@ -147,19 +163,21 @@ cleanup:
 static int lfs_deinit(lfs_t* lfs) {
 
     // free allocated memory
-    if (!lfs->cfg->read_buffer) {
+    if (lfs->cfg) {
+        if (!lfs->cfg->read_buffer && lfs->read_cache.buffer) {
+            free(lfs->read_cache.buffer);
+            lfs->read_cache.buffer = NULL;
+        }
 
-        free(lfs->read_cache.buffer);
-    }
+        if (!lfs->cfg->write_buffer && lfs->write_cache.buffer) {
+            free(lfs->write_cache.buffer);
+            lfs->write_cache.buffer = NULL;
+        }
 
-    if (!lfs->cfg->write_buffer) {
-
-        free(lfs->write_cache.buffer);
-    }
-
-    if (!lfs->cfg->lookahead_buffer) {
-
-        free(lfs->free.buffer);
+        if (!lfs->cfg->lookahead_buffer && lfs->free.buffer) {
+            free(lfs->free.buffer);
+            lfs->free.buffer = NULL;
+        }
     }
 
     return LFS_ERR_OK;
