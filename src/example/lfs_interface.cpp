@@ -48,6 +48,10 @@ static ErrorCode lfsToHxErrorCode(int err) {
         return ErrorCode::kCodeObjectNotCompatible;
     }
 
+    case LFS_ERR_NOENT: { // No such file or directory
+        return ErrorCode::kCodeFileNotFound;
+    }
+
     default: {
         return ErrorCode::kCodeUnknownError;
     }
