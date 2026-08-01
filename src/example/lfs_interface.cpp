@@ -1,11 +1,25 @@
 #include "lfs_interface.h"
-
-
 #include "file_backend.h"
 #include "memory_backend.h"
 
+#include <unordered_map>
+#include <vector>
+#include <algorithm>
+#include <cstring>
 
-using namespace fs;
+#ifndef _WIN32
+#include <codecvt>
+#include <locale>
+static inline int _wfopen_s(FILE** pFile, const wchar_t* filename, const wchar_t* mode) {
+    std::wstring_convert<std::codecvt_utf8<wchar_t>> conv;
+    std::string path = conv.to_bytes(filename);
+    std::string m = conv.to_bytes(mode);
+    *pFile = fopen(path.c_str(), m.c_str());
+    return *pFile ? 0 : -1;
+}
+#endif
+
+namespace fs {
 
 static ErrorCode lfsToHxErrorCode(int err) {
 
@@ -52,53 +66,192 @@ struct VFSFileObject
     : public IFileObject {
     std::shared_ptr<lfs_t> _lfs_handle;
     lfs_file_t _file_handle;
+    uint64_t _pos;
+    uint64_t _file_size;
+    bool _is_open;
+
+    static constexpr size_t PAGE_SIZE = 4096;
+
+    struct Page {
+        std::vector<uint8_t> data;
+        bool dirty = false;
+    };
+    std::unordered_map<uint64_t, Page> _pages;
 
     VFSFileObject(std::shared_ptr<lfs_t> lfs_handle)
         : _lfs_handle(lfs_handle)
-        , _file_handle({}) {}
+        , _file_handle({})
+        , _pos(0)
+        , _file_size(0)
+        , _is_open(false) {}
+
+    void init_file_state() {
+        _pos = 0;
+        lfs_soff_t sz = lfs_file_size(_lfs_handle.get(), &_file_handle);
+        _file_size = (sz >= 0) ? (uint64_t)sz : 0;
+        _is_open = true;
+    }
 
     ~VFSFileObject() {
-        lfs_file_close(_lfs_handle.get(), &_file_handle);
+        if (_is_open) {
+            flush();
+            lfs_file_close(_lfs_handle.get(), &_file_handle);
+            _is_open = false;
+        }
+    }
+
+private:
+    void load_page_if_needed(uint64_t page_idx) {
+        auto& page = _pages[page_idx];
+        if (page.data.empty()) {
+            page.data.resize(PAGE_SIZE, 0);
+            uint64_t page_start = page_idx * PAGE_SIZE;
+            lfs_soff_t disk_sz = lfs_file_size(_lfs_handle.get(), &_file_handle);
+            if (disk_sz > 0 && page_start < (uint64_t)disk_sz) {
+                uint64_t to_read = std::min((uint64_t)PAGE_SIZE, (uint64_t)disk_sz - page_start);
+                lfs_file_seek(_lfs_handle.get(), &_file_handle, page_start, LFS_SEEK_SET);
+                lfs_file_read(_lfs_handle.get(), &_file_handle, page.data.data(), to_read);
+            }
+        }
     }
 
 public:
     int64_t read(void* data, uint64_t size) override {
-        return lfs_file_read(_lfs_handle.get(), &_file_handle, data, size);
+        if (!_is_open || size == 0) return 0;
+        if (_pos >= _file_size) return 0;
+
+        uint64_t bytes_to_read = std::min(size, _file_size - _pos);
+        uint64_t bytes_read = 0;
+        uint8_t* dst = static_cast<uint8_t*>(data);
+
+        while (bytes_read < bytes_to_read) {
+            uint64_t curr_pos = _pos + bytes_read;
+            uint64_t page_idx = curr_pos / PAGE_SIZE;
+            uint64_t page_off = curr_pos % PAGE_SIZE;
+            uint64_t chunk = std::min(bytes_to_read - bytes_read, (uint64_t)(PAGE_SIZE - page_off));
+
+            auto it = _pages.find(page_idx);
+            if (it != _pages.end() && !it->second.data.empty()) {
+                std::memcpy(dst + bytes_read, it->second.data.data() + page_off, chunk);
+            } else {
+                lfs_file_seek(_lfs_handle.get(), &_file_handle, curr_pos, LFS_SEEK_SET);
+                lfs_ssize_t res = lfs_file_read(_lfs_handle.get(), &_file_handle, dst + bytes_read, chunk);
+                if (res < 0) {
+                    if (bytes_read > 0) break;
+                    return res;
+                }
+            }
+            bytes_read += chunk;
+        }
+
+        _pos += bytes_read;
+        return bytes_read;
     }
+
     int64_t write(const void* data, uint64_t size) override {
-        return lfs_file_write(_lfs_handle.get(), &_file_handle, data, size);
+        if (!_is_open || size == 0) return 0;
+
+        const uint8_t* src = static_cast<const uint8_t*>(data);
+        uint64_t bytes_written = 0;
+
+        while (bytes_written < size) {
+            uint64_t curr_pos = _pos + bytes_written;
+            uint64_t page_idx = curr_pos / PAGE_SIZE;
+            uint64_t page_off = curr_pos % PAGE_SIZE;
+            uint64_t chunk = std::min(size - bytes_written, (uint64_t)(PAGE_SIZE - page_off));
+
+            load_page_if_needed(page_idx);
+            auto& page = _pages[page_idx];
+
+            std::memcpy(page.data.data() + page_off, src + bytes_written, chunk);
+            page.dirty = true;
+
+            bytes_written += chunk;
+            if (curr_pos + chunk > _file_size) {
+                _file_size = curr_pos + chunk;
+            }
+        }
+
+        _pos += bytes_written;
+        return bytes_written;
     }
+
     int64_t truncate(uint64_t size) override {
-        return lfs_file_truncate(_lfs_handle.get(), &_file_handle, size);
+        if (!_is_open) return LFS_ERR_BADF;
+
+        flush();
+
+        int err = lfs_file_truncate(_lfs_handle.get(), &_file_handle, size);
+        if (err == LFS_ERR_OK) {
+            _file_size = size;
+            if (_pos > _file_size) {
+                _pos = _file_size;
+            }
+            uint64_t max_page = (size + PAGE_SIZE - 1) / PAGE_SIZE;
+            for (auto it = _pages.begin(); it != _pages.end();) {
+                if (it->first >= max_page) {
+                    it = _pages.erase(it);
+                } else {
+                    ++it;
+                }
+            }
+        }
+        return err;
     }
+
     int64_t seek(uint64_t offset, SeekType type) override {
+        if (!_is_open) return LFS_ERR_BADF;
 
-        int whence = 0;
-
+        int64_t new_pos = _pos;
         switch (type) {
-        case kSeekSet: {
-            whence = LFS_SEEK_SET; break;
-        }
-        case kSeekCur: {
-            whence = LFS_SEEK_CUR; break;
-        }
-        case kSeekEnd: {
-            whence = LFS_SEEK_END; break;
-        }
+        case kSeekSet: new_pos = offset; break;
+        case kSeekCur: new_pos = (int64_t)_pos + offset; break;
+        case kSeekEnd: new_pos = (int64_t)_file_size + offset; break;
         }
 
-        return lfs_file_seek(_lfs_handle.get(), &_file_handle, offset, whence);
+        if (new_pos < 0) return LFS_ERR_INVAL;
+        _pos = static_cast<uint64_t>(new_pos);
+        return _pos;
     }
+
     int64_t tell() override {
-        return lfs_file_tell(_lfs_handle.get(), &_file_handle);
+        return _pos;
     }
+
     int64_t size() override {
-        return lfs_file_size(_lfs_handle.get(), &_file_handle);
+        return _file_size;
     }
+
     void flush() override {
+        if (!_is_open) return;
 
+        std::vector<uint64_t> dirty_indices;
+        for (const auto& kv : _pages) {
+            if (kv.second.dirty) {
+                dirty_indices.push_back(kv.first);
+            }
+        }
+
+        if (dirty_indices.empty()) return;
+
+        std::sort(dirty_indices.begin(), dirty_indices.end());
+
+        for (uint64_t page_idx : dirty_indices) {
+            auto& page = _pages[page_idx];
+            if (!page.dirty) continue;
+
+            uint64_t page_start = page_idx * PAGE_SIZE;
+            uint64_t write_bytes = std::min((uint64_t)PAGE_SIZE, _file_size - page_start);
+
+            if (write_bytes > 0) {
+                lfs_file_seek(_lfs_handle.get(), &_file_handle, page_start, LFS_SEEK_SET);
+                lfs_file_write(_lfs_handle.get(), &_file_handle, page.data.data(), write_bytes);
+            }
+            page.dirty = false;
+        }
+
+        lfs_file_sync(_lfs_handle.get(), &_file_handle);
     }
-
 };
 
 std::vector<Entry> lfsVFS::dir(const std::string& path) {
@@ -158,20 +311,21 @@ ErrorCode lfsVFS::openFile(std::shared_ptr<IFileObject>& handle, const std::stri
     if (flags & kFileTruncate) { lfs_flags |= LFS_O_TRUNC; }
     if (flags & kFileAppend) { lfs_flags |= LFS_O_APPEND; }
 
-    std::shared_ptr<IFileObject> file_handle(new VFSFileObject(_lfs_handle));
+    auto file_obj = std::make_shared<VFSFileObject>(_lfs_handle);
 
     int err = lfs_file_open(
         _lfs_handle.get(),
-        &static_cast<VFSFileObject*>(file_handle.get())->_file_handle,
+        &file_obj->_file_handle,
         path.c_str(), lfs_flags);
 
-    static_cast<VFSFileObject*>(file_handle.get())->_path = path;
+    file_obj->_path = path;
 
     if (err != LFS_ERR_OK) {
         return lfsToHxErrorCode(err);
     }
 
-    handle = file_handle;
+    file_obj->init_file_state();
+    handle = file_obj;
 
     return lfsToHxErrorCode(err);
 }
@@ -447,3 +601,4 @@ ErrorCode fs::createVFS(const std::wstring& path, std::shared_ptr< IFileSystemDe
 
     return ErrorCode::kCodeOK;
 }
+} // namespace fs

@@ -1,4 +1,11 @@
 #pragma once
+#include <stdio.h>
+#include <stdlib.h>
+
+#ifndef _WIN32
+#define _fseeki64 fseeko
+#define __debugbreak() abort()
+#endif
 
 
 struct vfs_file_context : fs::lfsVFS::VFSContext {

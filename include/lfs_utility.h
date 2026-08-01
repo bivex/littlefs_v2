@@ -127,49 +127,34 @@ __forceinline int __builtin_clz(unsigned int x)
 }
 #endif // _LIBCPP_MSVC
 
-// Macros, may be replaced by system specific wrappers. Arguments to these
-// macros must not have side-effects as the macros can be removed for a smaller
-// code footprint
+#ifndef _countof
+#define _countof(a) (sizeof(a) / sizeof((a)[0]))
+#endif
+
+#ifndef _WIN32
+inline int strcpy_s(char* dest, size_t destsz, const char* src) {
+    if (!dest || !src || destsz == 0) return -1;
+    strncpy(dest, src, destsz - 1);
+    dest[destsz - 1] = '\0';
+    return 0;
+}
+#endif
 
 // Logging functions
 #ifndef LFS_TRACE
-#ifdef LFS_YES_TRACE
-#define LFS_TRACE_(fmt, ...) \
-    printf("%s:%d:trace: " fmt "%s\n", __FILE__, __LINE__, __VA_ARGS__)
-#define LFS_TRACE(...) LFS_TRACE_(__VA_ARGS__, "")
-#else
 #define LFS_TRACE(...)
-#endif
 #endif
 
 #ifndef LFS_DEBUG
-#ifndef LFS_NO_DEBUG
-#define LFS_DEBUG_(fmt, ...) \
-    printf(__VA_ARGS__) //"%s:%d:debug: " fmt "%s\n", __FILE__, __LINE__, __VA_ARGS__)
-#define LFS_DEBUG(...) LFS_DEBUG_(__VA_ARGS__, "")
-#else
 #define LFS_DEBUG(...)
-#endif
 #endif
 
 #ifndef LFS_WARN
-#ifndef LFS_NO_WARN
-#define LFS_WARN_(fmt, ...) \
-    printf(__VA_ARGS__) //"%s:%d:warn: " fmt "%s\n", __FILE__, __LINE__, __VA_ARGS__)
-#define LFS_WARN(...) LFS_WARN_(__VA_ARGS__, "")
-#else
 #define LFS_WARN(...)
-#endif
 #endif
 
 #ifndef LFS_ERROR
-#ifndef LFS_NO_ERROR
-#define LFS_ERROR_(fmt, ...) \
-    printf(__VA_ARGS__) //"%s:%d:error: " fmt "%s\n", __FILE__, __LINE__, __VA_ARGS__)
-#define LFS_ERROR(...) LFS_ERROR_(__VA_ARGS__, "")
-#else
 #define LFS_ERROR(...)
-#endif
 #endif
 
 // Runtime assertions
@@ -311,7 +296,7 @@ constexpr uint64_t lfs_tole64(uint64_t a) {
 
 
 // Convert between 32-bit big-endian and native order
-constexpr uint32_t lfs_frombe32(uint32_t a) {
+inline uint32_t lfs_frombe32(uint32_t a) {
 #if(defined(  BYTE_ORDER  ) && defined(  ORDER_BIG_ENDIAN  ) &&   BYTE_ORDER   ==   ORDER_BIG_ENDIAN  ) || \
     (defined(__BYTE_ORDER  ) && defined(__ORDER_BIG_ENDIAN  ) && __BYTE_ORDER   == __ORDER_BIG_ENDIAN  ) || \
     (defined(__BYTE_ORDER__) && defined(__ORDER_BIG_ENDIAN__) && __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__)
@@ -324,7 +309,7 @@ constexpr uint32_t lfs_frombe32(uint32_t a) {
 #endif
 }
 
-constexpr uint64_t lfs_frombe64(uint64_t a) {
+inline uint64_t lfs_frombe64(uint64_t a) {
 #if(defined(  BYTE_ORDER  ) && defined(  ORDER_BIG_ENDIAN  ) &&   BYTE_ORDER   ==   ORDER_BIG_ENDIAN  ) || \
     (defined(__BYTE_ORDER  ) && defined(__ORDER_BIG_ENDIAN  ) && __BYTE_ORDER   == __ORDER_BIG_ENDIAN  ) || \
     (defined(__BYTE_ORDER__) && defined(__ORDER_BIG_ENDIAN__) && __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__)
@@ -338,7 +323,6 @@ constexpr uint64_t lfs_frombe64(uint64_t a) {
         (uint64_t(((uint8_t*)&a)[5]) << (8 * 2)) |
         (uint64_t(((uint8_t*)&a)[6]) << (8 * 1)) |
         (uint64_t(((uint8_t*)&a)[7]) << (8 * 0));
-
 #endif
 }
 

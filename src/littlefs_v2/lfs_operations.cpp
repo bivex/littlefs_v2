@@ -504,7 +504,7 @@ int lfs_fs_rawgrow(lfs_t* lfs, lfs_size_t block_count) {
         lfs_superblock_tole64(&superblock);
 
         lfs_metadata_attribute_t attr[] = {
-            { tag, &superblock }
+            { static_cast<lfs_tag_t>(tag), &superblock }
         };
 
         err = lfs_dir_commit(lfs, &root, attr, _countof(attr));
