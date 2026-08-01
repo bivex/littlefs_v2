@@ -364,3 +364,14 @@ FodyWeavers.xsd
 
 
 /tmp/*
+
+# Test binaries & virtual disk files
+*.fs
+*.bin
+test_vfs
+leak_check
+profiler
+profiler_run
+build/
+.DS_Store
+/leak_check.dSYM
