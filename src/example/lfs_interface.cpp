@@ -362,7 +362,7 @@ ErrorCode lfsVFS::deleteDirectory(const std::string& path) {
     return lfsToHxErrorCode(lfs_remove(_lfs_handle.get(), path.c_str()));
 }
 
-ErrorCode fs::openVFS(const std::wstring& path, std::shared_ptr< IFileSystemDevice>& filesystem, lfsVFS::Backend backend) {
+ErrorCode openVFS(const std::wstring& path, std::shared_ptr< IFileSystemDevice>& filesystem, lfsVFS::Backend backend) {
 
     std::shared_ptr< lfs_t> fs_handle(new lfs_t);
     std::shared_ptr< lfs_config_t> fs_config(new lfs_config_t);
@@ -480,7 +480,7 @@ ErrorCode fs::openVFS(const std::wstring& path, std::shared_ptr< IFileSystemDevi
     return ErrorCode::kCodeOK;
 }
 
-ErrorCode fs::createVFS(const std::wstring& path, std::shared_ptr< IFileSystemDevice>& filesystem, lfsVFS::Backend backend) {
+ErrorCode createVFS(const std::wstring& path, std::shared_ptr< IFileSystemDevice>& filesystem, lfsVFS::Backend backend) {
 
     std::shared_ptr< lfs_t> fs_handle(new lfs_t);
     std::shared_ptr< lfs_config_t> fs_config(new lfs_config_t);
