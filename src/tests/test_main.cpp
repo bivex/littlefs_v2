@@ -109,6 +109,32 @@ static bool test_autogrow() {
     return true;
 }
 
+static bool run_thread_worker(std::shared_ptr<fs::IFileSystemDevice> vfs, int thread_id, int ops_per_thread) {
+    for (int op = 0; op < ops_per_thread; ++op) {
+        std::string fname = "th_" + std::to_string(thread_id) + "_f_" + std::to_string(op) + ".txt";
+        std::string data = "Thread " + std::to_string(thread_id) + " Data iteration " + std::to_string(op);
+
+        auto open_res = vfs->open(fname, fs::kFileRead | fs::kFileWrite | fs::kFileCreateIfNotExists);
+        if (!open_res.has_value()) return false;
+
+        fs::FileHandle handle(open_res.value());
+        handle->write(data.c_str(), data.size());
+        handle->flush();
+
+        handle->seek(0, fs::IFileObject::kSeekSet);
+        std::vector<char> buf(data.size() + 1, 0);
+        int64_t r = handle->read(buf.data(), data.size());
+        if (r != static_cast<int64_t>(data.size()) || std::string(buf.data()) != data) {
+            return false;
+        }
+
+        if (op % 5 == 0 && !vfs->listDir("/").has_value()) {
+            return false;
+        }
+    }
+    return true;
+}
+
 // 3. Multi-Threaded Stress Test (Thread Safety)
 static bool test_thread_safety() {
     std::cout << "[*] Running Test: Multi-Threaded Concurrency..." << std::endl;
@@ -124,44 +150,14 @@ static bool test_thread_safety() {
 
     for (int t = 0; t < num_threads; ++t) {
         workers.emplace_back([vfs, t, ops_per_thread, &all_ok]() {
-            for (int op = 0; op < ops_per_thread; ++op) {
-                std::string fname = "th_" + std::to_string(t) + "_f_" + std::to_string(op) + ".txt";
-                std::string data = "Thread " + std::to_string(t) + " Data iteration " + std::to_string(op);
-
-                auto open_res = vfs->open(fname, fs::kFileRead | fs::kFileWrite | fs::kFileCreateIfNotExists);
-                if (!open_res.has_value()) {
-                    all_ok = false;
-                    return;
-                }
-
-                fs::FileHandle handle(open_res.value());
-                handle->write(data.c_str(), data.size());
-                handle->flush();
-
-                handle->seek(0, fs::IFileObject::kSeekSet);
-                std::vector<char> buf(data.size() + 1, 0);
-                int64_t r = handle->read(buf.data(), data.size());
-                if (r != static_cast<int64_t>(data.size()) || std::string(buf.data()) != data) {
-                    all_ok = false;
-                    return;
-                }
-
-                // Randomly perform directory listing
-                if (op % 5 == 0) {
-                    auto entries = vfs->listDir("/");
-                    if (!entries.has_value()) {
-                        all_ok = false;
-                        return;
-                    }
-                }
+            if (!run_thread_worker(vfs, t, ops_per_thread)) {
+                all_ok = false;
             }
         });
     }
 
     for (auto& w : workers) {
-        if (w.joinable()) {
-            w.join();
-        }
+        if (w.joinable()) w.join();
     }
 
     TEST_CHECK(all_ok.load(), "Concurrent operations failed");

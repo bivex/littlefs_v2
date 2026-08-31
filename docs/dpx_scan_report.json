@@ -1,276 +1,32 @@
 {
   "project_path": "/Volumes/External/Code/littlefs_v2",
   "scanned_files_count": 25,
-  "total_detections": 58,
-  "elapsed_seconds": 0.7964,
+  "total_detections": 53,
+  "elapsed_seconds": 0.8111,
   "summary_by_category": {
     "creational": 0,
     "structural": 0,
     "behavioral": 3,
     "architectural": 0,
     "concurrency": 0,
-    "principle": 55
+    "principle": 50
   },
   "summary_by_type": {
-    "kiss": 41,
+    "kiss": 37,
     "open_closed": 1,
     "strategy": 1,
     "single_responsibility": 1,
     "interface_segregation": 5,
-    "law_of_demeter": 1,
     "dependency_inversion": 6,
     "template_method": 2
   },
   "summary_by_confidence_level": {
-    "VERY_HIGH": 50,
+    "VERY_HIGH": 45,
     "HIGH": 7,
     "MEDIUM": 1,
     "LOW": 0
   },
   "detections": [
-    {
-      "pattern_type": "kiss",
-      "pattern_category": "principle",
-      "target_name": "errorToString",
-      "target_kind": "kiss_cyclomatic_complexity",
-      "confidence": {
-        "score": 0.88,
-        "level": "VERY_HIGH",
-        "percentage": "88%",
-        "evidences": [
-          {
-            "description": "Method 'errorToString' has high cyclomatic complexity (16 branch points), violating KISS",
-            "weight": 0.7,
-            "rule_code": "KISS_KISS_HIGH_CYCLOMATIC_COMPLEXITY",
-            "location": {
-              "file_path": "/Volumes/External/Code/littlefs_v2/include/lfs_result.h",
-              "line": 1,
-              "column": 1,
-              "end_line": null,
-              "end_column": null,
-              "formatted": "/Volumes/External/Code/littlefs_v2/include/lfs_result.h:1:1"
-            },
-            "snippet": null
-          },
-          {
-            "description": "Complex nested conditionals are difficult to test and maintain; decompose into smaller functions",
-            "weight": 0.35,
-            "rule_code": "KISS_KISS_DECOMPOSITION_NEEDED",
-            "location": {
-              "file_path": "/Volumes/External/Code/littlefs_v2/include/lfs_result.h",
-              "line": 1,
-              "column": 1,
-              "end_line": null,
-              "end_column": null,
-              "formatted": "/Volumes/External/Code/littlefs_v2/include/lfs_result.h:1:1"
-            },
-            "snippet": null
-          }
-        ]
-      },
-      "primary_location": {
-        "file_path": "/Volumes/External/Code/littlefs_v2/include/lfs_result.h",
-        "line": 1,
-        "column": 1,
-        "end_line": null,
-        "end_column": null,
-        "formatted": "/Volumes/External/Code/littlefs_v2/include/lfs_result.h:1:1"
-      },
-      "related_locations": [],
-      "summary": "KISS Violation (High Complexity): Method 'errorToString' has 16 control flow branches",
-      "evidences": [
-        {
-          "description": "Method 'errorToString' has high cyclomatic complexity (16 branch points), violating KISS",
-          "weight": 0.7,
-          "rule_code": "KISS_KISS_HIGH_CYCLOMATIC_COMPLEXITY",
-          "location": {
-            "file_path": "/Volumes/External/Code/littlefs_v2/include/lfs_result.h",
-            "line": 1,
-            "column": 1,
-            "end_line": null,
-            "end_column": null,
-            "formatted": "/Volumes/External/Code/littlefs_v2/include/lfs_result.h:1:1"
-          },
-          "snippet": null
-        },
-        {
-          "description": "Complex nested conditionals are difficult to test and maintain; decompose into smaller functions",
-          "weight": 0.35,
-          "rule_code": "KISS_KISS_DECOMPOSITION_NEEDED",
-          "location": {
-            "file_path": "/Volumes/External/Code/littlefs_v2/include/lfs_result.h",
-            "line": 1,
-            "column": 1,
-            "end_line": null,
-            "end_column": null,
-            "formatted": "/Volumes/External/Code/littlefs_v2/include/lfs_result.h:1:1"
-          },
-          "snippet": null
-        }
-      ]
-    },
-    {
-      "pattern_type": "kiss",
-      "pattern_category": "principle",
-      "target_name": "lfsToErrorCode",
-      "target_kind": "kiss_cyclomatic_complexity",
-      "confidence": {
-        "score": 0.88,
-        "level": "VERY_HIGH",
-        "percentage": "88%",
-        "evidences": [
-          {
-            "description": "Method 'lfsToErrorCode' has high cyclomatic complexity (16 branch points), violating KISS",
-            "weight": 0.7,
-            "rule_code": "KISS_KISS_HIGH_CYCLOMATIC_COMPLEXITY",
-            "location": {
-              "file_path": "/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.cpp",
-              "line": 1,
-              "column": 1,
-              "end_line": null,
-              "end_column": null,
-              "formatted": "/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.cpp:1:1"
-            },
-            "snippet": null
-          },
-          {
-            "description": "Complex nested conditionals are difficult to test and maintain; decompose into smaller functions",
-            "weight": 0.35,
-            "rule_code": "KISS_KISS_DECOMPOSITION_NEEDED",
-            "location": {
-              "file_path": "/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.cpp",
-              "line": 1,
-              "column": 1,
-              "end_line": null,
-              "end_column": null,
-              "formatted": "/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.cpp:1:1"
-            },
-            "snippet": null
-          }
-        ]
-      },
-      "primary_location": {
-        "file_path": "/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.cpp",
-        "line": 1,
-        "column": 1,
-        "end_line": null,
-        "end_column": null,
-        "formatted": "/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.cpp:1:1"
-      },
-      "related_locations": [],
-      "summary": "KISS Violation (High Complexity): Method 'lfsToErrorCode' has 16 control flow branches",
-      "evidences": [
-        {
-          "description": "Method 'lfsToErrorCode' has high cyclomatic complexity (16 branch points), violating KISS",
-          "weight": 0.7,
-          "rule_code": "KISS_KISS_HIGH_CYCLOMATIC_COMPLEXITY",
-          "location": {
-            "file_path": "/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.cpp",
-            "line": 1,
-            "column": 1,
-            "end_line": null,
-            "end_column": null,
-            "formatted": "/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.cpp:1:1"
-          },
-          "snippet": null
-        },
-        {
-          "description": "Complex nested conditionals are difficult to test and maintain; decompose into smaller functions",
-          "weight": 0.35,
-          "rule_code": "KISS_KISS_DECOMPOSITION_NEEDED",
-          "location": {
-            "file_path": "/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.cpp",
-            "line": 1,
-            "column": 1,
-            "end_line": null,
-            "end_column": null,
-            "formatted": "/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.cpp:1:1"
-          },
-          "snippet": null
-        }
-      ]
-    },
-    {
-      "pattern_type": "kiss",
-      "pattern_category": "principle",
-      "target_name": "lfsToLegacyErrorCode",
-      "target_kind": "kiss_cyclomatic_complexity",
-      "confidence": {
-        "score": 0.88,
-        "level": "VERY_HIGH",
-        "percentage": "88%",
-        "evidences": [
-          {
-            "description": "Method 'lfsToLegacyErrorCode' has high cyclomatic complexity (9 branch points), violating KISS",
-            "weight": 0.7,
-            "rule_code": "KISS_KISS_HIGH_CYCLOMATIC_COMPLEXITY",
-            "location": {
-              "file_path": "/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.cpp",
-              "line": 1,
-              "column": 1,
-              "end_line": null,
-              "end_column": null,
-              "formatted": "/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.cpp:1:1"
-            },
-            "snippet": null
-          },
-          {
-            "description": "Complex nested conditionals are difficult to test and maintain; decompose into smaller functions",
-            "weight": 0.35,
-            "rule_code": "KISS_KISS_DECOMPOSITION_NEEDED",
-            "location": {
-              "file_path": "/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.cpp",
-              "line": 1,
-              "column": 1,
-              "end_line": null,
-              "end_column": null,
-              "formatted": "/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.cpp:1:1"
-            },
-            "snippet": null
-          }
-        ]
-      },
-      "primary_location": {
-        "file_path": "/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.cpp",
-        "line": 1,
-        "column": 1,
-        "end_line": null,
-        "end_column": null,
-        "formatted": "/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.cpp:1:1"
-      },
-      "related_locations": [],
-      "summary": "KISS Violation (High Complexity): Method 'lfsToLegacyErrorCode' has 9 control flow branches",
-      "evidences": [
-        {
-          "description": "Method 'lfsToLegacyErrorCode' has high cyclomatic complexity (9 branch points), violating KISS",
-          "weight": 0.7,
-          "rule_code": "KISS_KISS_HIGH_CYCLOMATIC_COMPLEXITY",
-          "location": {
-            "file_path": "/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.cpp",
-            "line": 1,
-            "column": 1,
-            "end_line": null,
-            "end_column": null,
-            "formatted": "/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.cpp:1:1"
-          },
-          "snippet": null
-        },
-        {
-          "description": "Complex nested conditionals are difficult to test and maintain; decompose into smaller functions",
-          "weight": 0.35,
-          "rule_code": "KISS_KISS_DECOMPOSITION_NEEDED",
-          "location": {
-            "file_path": "/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.cpp",
-            "line": 1,
-            "column": 1,
-            "end_line": null,
-            "end_column": null,
-            "formatted": "/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.cpp:1:1"
-          },
-          "snippet": null
-        }
-      ]
-    },
     {
       "pattern_type": "kiss",
       "pattern_category": "principle",
@@ -347,87 +103,6 @@
             "end_line": null,
             "end_column": null,
             "formatted": "/Volumes/External/Code/littlefs_v2/src/example/power_loss_test.cpp:1:1"
-          },
-          "snippet": null
-        }
-      ]
-    },
-    {
-      "pattern_type": "kiss",
-      "pattern_category": "principle",
-      "target_name": "test_thread_safety",
-      "target_kind": "kiss_cyclomatic_complexity",
-      "confidence": {
-        "score": 0.88,
-        "level": "VERY_HIGH",
-        "percentage": "88%",
-        "evidences": [
-          {
-            "description": "Method 'test_thread_safety' has high cyclomatic complexity (8 branch points), violating KISS",
-            "weight": 0.7,
-            "rule_code": "KISS_KISS_HIGH_CYCLOMATIC_COMPLEXITY",
-            "location": {
-              "file_path": "/Volumes/External/Code/littlefs_v2/src/tests/test_main.cpp",
-              "line": 1,
-              "column": 1,
-              "end_line": null,
-              "end_column": null,
-              "formatted": "/Volumes/External/Code/littlefs_v2/src/tests/test_main.cpp:1:1"
-            },
-            "snippet": null
-          },
-          {
-            "description": "Complex nested conditionals are difficult to test and maintain; decompose into smaller functions",
-            "weight": 0.35,
-            "rule_code": "KISS_KISS_DECOMPOSITION_NEEDED",
-            "location": {
-              "file_path": "/Volumes/External/Code/littlefs_v2/src/tests/test_main.cpp",
-              "line": 1,
-              "column": 1,
-              "end_line": null,
-              "end_column": null,
-              "formatted": "/Volumes/External/Code/littlefs_v2/src/tests/test_main.cpp:1:1"
-            },
-            "snippet": null
-          }
-        ]
-      },
-      "primary_location": {
-        "file_path": "/Volumes/External/Code/littlefs_v2/src/tests/test_main.cpp",
-        "line": 1,
-        "column": 1,
-        "end_line": null,
-        "end_column": null,
-        "formatted": "/Volumes/External/Code/littlefs_v2/src/tests/test_main.cpp:1:1"
-      },
-      "related_locations": [],
-      "summary": "KISS Violation (High Complexity): Method 'test_thread_safety' has 8 control flow branches",
-      "evidences": [
-        {
-          "description": "Method 'test_thread_safety' has high cyclomatic complexity (8 branch points), violating KISS",
-          "weight": 0.7,
-          "rule_code": "KISS_KISS_HIGH_CYCLOMATIC_COMPLEXITY",
-          "location": {
-            "file_path": "/Volumes/External/Code/littlefs_v2/src/tests/test_main.cpp",
-            "line": 1,
-            "column": 1,
-            "end_line": null,
-            "end_column": null,
-            "formatted": "/Volumes/External/Code/littlefs_v2/src/tests/test_main.cpp:1:1"
-          },
-          "snippet": null
-        },
-        {
-          "description": "Complex nested conditionals are difficult to test and maintain; decompose into smaller functions",
-          "weight": 0.35,
-          "rule_code": "KISS_KISS_DECOMPOSITION_NEEDED",
-          "location": {
-            "file_path": "/Volumes/External/Code/littlefs_v2/src/tests/test_main.cpp",
-            "line": 1,
-            "column": 1,
-            "end_line": null,
-            "end_column": null,
-            "formatted": "/Volumes/External/Code/littlefs_v2/src/tests/test_main.cpp:1:1"
           },
           "snippet": null
         }
@@ -3198,87 +2873,6 @@
             "end_line": null,
             "end_column": null,
             "formatted": "/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.h:1:1"
-          },
-          "snippet": null
-        }
-      ]
-    },
-    {
-      "pattern_type": "law_of_demeter",
-      "pattern_category": "principle",
-      "target_name": "lfs_fuse_readdir",
-      "target_kind": "law_of_demeter_train_wreck",
-      "confidence": {
-        "score": 0.85,
-        "level": "VERY_HIGH",
-        "percentage": "85%",
-        "evidences": [
-          {
-            "description": "Method 'lfs_fuse_readdir' violates Law of Demeter with deep chained call: 'entry.getPath().c_str()'",
-            "weight": 0.64,
-            "rule_code": "LAW_OF_DEMETER_LOD_TRAIN_WRECK_CHAIN",
-            "location": {
-              "file_path": "/Volumes/External/Code/littlefs_v2/src/example/lfs_fuse.cpp",
-              "line": 1,
-              "column": 1,
-              "end_line": null,
-              "end_column": null,
-              "formatted": "/Volumes/External/Code/littlefs_v2/src/example/lfs_fuse.cpp:1:1"
-            },
-            "snippet": null
-          },
-          {
-            "description": "Navigating internal object structures breaks encapsulation and couples caller to indirect dependencies",
-            "weight": 0.35,
-            "rule_code": "LAW_OF_DEMETER_LOD_STRUCTURAL_COUPLING",
-            "location": {
-              "file_path": "/Volumes/External/Code/littlefs_v2/src/example/lfs_fuse.cpp",
-              "line": 1,
-              "column": 1,
-              "end_line": null,
-              "end_column": null,
-              "formatted": "/Volumes/External/Code/littlefs_v2/src/example/lfs_fuse.cpp:1:1"
-            },
-            "snippet": null
-          }
-        ]
-      },
-      "primary_location": {
-        "file_path": "/Volumes/External/Code/littlefs_v2/src/example/lfs_fuse.cpp",
-        "line": 1,
-        "column": 1,
-        "end_line": null,
-        "end_column": null,
-        "formatted": "/Volumes/External/Code/littlefs_v2/src/example/lfs_fuse.cpp:1:1"
-      },
-      "related_locations": [],
-      "summary": "Law of Demeter Violation in 'lfs_fuse_readdir': deep chain 'entry.getPath().c_str()'",
-      "evidences": [
-        {
-          "description": "Method 'lfs_fuse_readdir' violates Law of Demeter with deep chained call: 'entry.getPath().c_str()'",
-          "weight": 0.64,
-          "rule_code": "LAW_OF_DEMETER_LOD_TRAIN_WRECK_CHAIN",
-          "location": {
-            "file_path": "/Volumes/External/Code/littlefs_v2/src/example/lfs_fuse.cpp",
-            "line": 1,
-            "column": 1,
-            "end_line": null,
-            "end_column": null,
-            "formatted": "/Volumes/External/Code/littlefs_v2/src/example/lfs_fuse.cpp:1:1"
-          },
-          "snippet": null
-        },
-        {
-          "description": "Navigating internal object structures breaks encapsulation and couples caller to indirect dependencies",
-          "weight": 0.35,
-          "rule_code": "LAW_OF_DEMETER_LOD_STRUCTURAL_COUPLING",
-          "location": {
-            "file_path": "/Volumes/External/Code/littlefs_v2/src/example/lfs_fuse.cpp",
-            "line": 1,
-            "column": 1,
-            "end_line": null,
-            "end_column": null,
-            "formatted": "/Volumes/External/Code/littlefs_v2/src/example/lfs_fuse.cpp:1:1"
           },
           "snippet": null
         }

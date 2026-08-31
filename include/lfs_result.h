@@ -27,24 +27,26 @@ namespace fs {
     };
 
     inline const char* errorToString(ErrorCode err) {
-        switch (err) {
-            case ErrorCode::kSuccess: return "Success";
-            case ErrorCode::kFileNotFound: return "File not found";
-            case ErrorCode::kFileExists: return "File exists";
-            case ErrorCode::kNotDirectory: return "Not a directory";
-            case ErrorCode::kIsDirectory: return "Is a directory";
-            case ErrorCode::kDirectoryNotEmpty: return "Directory not empty";
-            case ErrorCode::kBadFileDescriptor: return "Bad file descriptor";
-            case ErrorCode::kFileTooLarge: return "File too large";
-            case ErrorCode::kInvalidParameter: return "Invalid parameter";
-            case ErrorCode::kNoSpaceOnDevice: return "No space on device";
-            case ErrorCode::kNoMemory: return "Out of memory";
-            case ErrorCode::kNoAttribute: return "No attribute";
-            case ErrorCode::kNameTooLong: return "File name too long";
-            case ErrorCode::kCorrupted: return "Corrupted filesystem";
-            case ErrorCode::kIoError: return "I/O error";
-            default: return "Unknown error";
-        }
+        static constexpr const char* const kErrorStrings[] = {
+            "Success",
+            "File not found",
+            "File exists",
+            "Not a directory",
+            "Is a directory",
+            "Directory not empty",
+            "Bad file descriptor",
+            "File too large",
+            "Invalid parameter",
+            "No space on device",
+            "Out of memory",
+            "No attribute",
+            "File name too long",
+            "Corrupted filesystem",
+            "I/O error",
+            "Unknown error"
+        };
+        const size_t idx = static_cast<size_t>(err);
+        return (idx < sizeof(kErrorStrings) / sizeof(kErrorStrings[0])) ? kErrorStrings[idx] : "Unknown error";
     }
 
     template <typename T, typename E = ErrorCode>

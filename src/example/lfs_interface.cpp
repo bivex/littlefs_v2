@@ -9,39 +9,42 @@
 
 namespace fs {
 
+    struct ErrorMapEntry {
+        int lfs_err;
+        ErrorCode modern_err;
+        LegacyErrorCode legacy_err;
+    };
+
+    static constexpr ErrorMapEntry kErrorMap[] = {
+        { LFS_ERR_OK, ErrorCode::kSuccess, kCodeOK },
+        { LFS_ERR_NOENT, ErrorCode::kFileNotFound, kCodeFileNotFound },
+        { LFS_ERR_EXIST, ErrorCode::kFileExists, kCodeUnknownError },
+        { LFS_ERR_NOTDIR, ErrorCode::kNotDirectory, kCodeObjectNotCompatible },
+        { LFS_ERR_ISDIR, ErrorCode::kIsDirectory, kCodeObjectNotCompatible },
+        { LFS_ERR_NOTEMPTY, ErrorCode::kDirectoryNotEmpty, kCodeUnknownError },
+        { LFS_ERR_BADF, ErrorCode::kBadFileDescriptor, kCodeBadDevice },
+        { LFS_ERR_FBIG, ErrorCode::kFileTooLarge, kCodeNoDeviceSpace },
+        { LFS_ERR_INVAL, ErrorCode::kInvalidParameter, kCodeObjectNotCompatible },
+        { LFS_ERR_NOSPC, ErrorCode::kNoSpaceOnDevice, kCodeNoDeviceSpace },
+        { LFS_ERR_NOMEM, ErrorCode::kNoMemory, kCodeUnknownError },
+        { LFS_ERR_NOATTR, ErrorCode::kNoAttribute, kCodeUnknownError },
+        { LFS_ERR_NAMETOOLONG, ErrorCode::kNameTooLong, kCodeUnknownError },
+        { LFS_ERR_CORRUPT, ErrorCode::kCorrupted, kCodeBadDevice },
+        { LFS_ERR_IO, ErrorCode::kIoError, kCodeBadDevice },
+    };
+
     static ErrorCode lfsToErrorCode(int err) {
-        switch (err) {
-            case LFS_ERR_OK: return ErrorCode::kSuccess;
-            case LFS_ERR_NOENT: return ErrorCode::kFileNotFound;
-            case LFS_ERR_EXIST: return ErrorCode::kFileExists;
-            case LFS_ERR_NOTDIR: return ErrorCode::kNotDirectory;
-            case LFS_ERR_ISDIR: return ErrorCode::kIsDirectory;
-            case LFS_ERR_NOTEMPTY: return ErrorCode::kDirectoryNotEmpty;
-            case LFS_ERR_BADF: return ErrorCode::kBadFileDescriptor;
-            case LFS_ERR_FBIG: return ErrorCode::kFileTooLarge;
-            case LFS_ERR_INVAL: return ErrorCode::kInvalidParameter;
-            case LFS_ERR_NOSPC: return ErrorCode::kNoSpaceOnDevice;
-            case LFS_ERR_NOMEM: return ErrorCode::kNoMemory;
-            case LFS_ERR_NOATTR: return ErrorCode::kNoAttribute;
-            case LFS_ERR_NAMETOOLONG: return ErrorCode::kNameTooLong;
-            case LFS_ERR_CORRUPT: return ErrorCode::kCorrupted;
-            case LFS_ERR_IO: return ErrorCode::kIoError;
-            default: return ErrorCode::kUnknownError;
+        for (const auto& entry : kErrorMap) {
+            if (entry.lfs_err == err) return entry.modern_err;
         }
+        return ErrorCode::kUnknownError;
     }
 
     static LegacyErrorCode lfsToLegacyErrorCode(int err) {
-        switch (err) {
-            case LFS_ERR_OK: return kCodeOK;
-            case LFS_ERR_NOENT: return kCodeFileNotFound;
-            case LFS_ERR_IO:
-            case LFS_ERR_CORRUPT:
-            case LFS_ERR_BADF: return kCodeBadDevice;
-            case LFS_ERR_FBIG:
-            case LFS_ERR_NOSPC: return kCodeNoDeviceSpace;
-            case LFS_ERR_INVAL: return kCodeObjectNotCompatible;
-            default: return kCodeUnknownError;
+        for (const auto& entry : kErrorMap) {
+            if (entry.lfs_err == err) return entry.legacy_err;
         }
+        return kCodeUnknownError;
     }
 
     // Bridge callbacks connecting LittleFS C function pointers to C++ IBlockDevice

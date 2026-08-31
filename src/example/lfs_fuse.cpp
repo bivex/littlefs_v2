@@ -79,7 +79,8 @@ static int lfs_fuse_readdir(const char* path, void* buf, fuse_fill_dir_t filler,
     auto entries = g_vfs->dir(rel_path.empty() ? "/" : rel_path);
 
     for (const auto& entry : entries) {
-        filler(buf, entry.getPath().c_str(), NULL, 0, (enum fuse_fill_dir_flags)0);
+        const std::string& entry_name = entry.getPath();
+        filler(buf, entry_name.c_str(), NULL, 0, (enum fuse_fill_dir_flags)0);
     }
 
     return 0;

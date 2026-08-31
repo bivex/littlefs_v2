@@ -2,8 +2,8 @@
 
 > **Project:** `/Volumes/External/Code/littlefs_v2`  
 > **Scanned Files:** 25  
-> **Total Detections:** 58  
-> **Duration:** 0.796s  
+> **Total Detections:** 53  
+> **Duration:** 0.811s  
 
 ---
 
@@ -12,46 +12,13 @@
 | Category | Detections Count |
 | :--- | :---: |
 | **BEHAVIORAL** | 3 |
-| **PRINCIPLE** | 55 |
+| **PRINCIPLE** | 50 |
 
 ---
 
 ## 📋 Identified Design Patterns
 
-### #1 KISS on kiss_cyclomatic_complexity `errorToString`
-- **Confidence:** 88% (🟢 `VERY_HIGH`)
-- **Primary Location:** [`/Volumes/External/Code/littlefs_v2/include/lfs_result.h:1:1`](/Volumes/External/Code/littlefs_v2/include/lfs_result.h)
-- **Summary:** KISS Violation (High Complexity): Method 'errorToString' has 16 control flow branches
-
-#### 🔎 Evidence Trail:
-- **+70%** `[KISS_KISS_HIGH_CYCLOMATIC_COMPLEXITY]` Method 'errorToString' has high cyclomatic complexity (16 branch points), violating KISS _(at `/Volumes/External/Code/littlefs_v2/include/lfs_result.h:1:1`)_
-- **+35%** `[KISS_KISS_DECOMPOSITION_NEEDED]` Complex nested conditionals are difficult to test and maintain; decompose into smaller functions _(at `/Volumes/External/Code/littlefs_v2/include/lfs_result.h:1:1`)_
-
----
-
-### #2 KISS on kiss_cyclomatic_complexity `lfsToErrorCode`
-- **Confidence:** 88% (🟢 `VERY_HIGH`)
-- **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.cpp)
-- **Summary:** KISS Violation (High Complexity): Method 'lfsToErrorCode' has 16 control flow branches
-
-#### 🔎 Evidence Trail:
-- **+70%** `[KISS_KISS_HIGH_CYCLOMATIC_COMPLEXITY]` Method 'lfsToErrorCode' has high cyclomatic complexity (16 branch points), violating KISS _(at `/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.cpp:1:1`)_
-- **+35%** `[KISS_KISS_DECOMPOSITION_NEEDED]` Complex nested conditionals are difficult to test and maintain; decompose into smaller functions _(at `/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.cpp:1:1`)_
-
----
-
-### #3 KISS on kiss_cyclomatic_complexity `lfsToLegacyErrorCode`
-- **Confidence:** 88% (🟢 `VERY_HIGH`)
-- **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.cpp)
-- **Summary:** KISS Violation (High Complexity): Method 'lfsToLegacyErrorCode' has 9 control flow branches
-
-#### 🔎 Evidence Trail:
-- **+70%** `[KISS_KISS_HIGH_CYCLOMATIC_COMPLEXITY]` Method 'lfsToLegacyErrorCode' has high cyclomatic complexity (9 branch points), violating KISS _(at `/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.cpp:1:1`)_
-- **+35%** `[KISS_KISS_DECOMPOSITION_NEEDED]` Complex nested conditionals are difficult to test and maintain; decompose into smaller functions _(at `/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.cpp:1:1`)_
-
----
-
-### #4 KISS on kiss_cyclomatic_complexity `run_power_loss_fault_injection_test`
+### #1 KISS on kiss_cyclomatic_complexity `run_power_loss_fault_injection_test`
 - **Confidence:** 88% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/example/power_loss_test.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/example/power_loss_test.cpp)
 - **Summary:** KISS Violation (High Complexity): Method 'run_power_loss_fault_injection_test' has 10 control flow branches
@@ -62,18 +29,7 @@
 
 ---
 
-### #5 KISS on kiss_cyclomatic_complexity `test_thread_safety`
-- **Confidence:** 88% (🟢 `VERY_HIGH`)
-- **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/tests/test_main.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/tests/test_main.cpp)
-- **Summary:** KISS Violation (High Complexity): Method 'test_thread_safety' has 8 control flow branches
-
-#### 🔎 Evidence Trail:
-- **+70%** `[KISS_KISS_HIGH_CYCLOMATIC_COMPLEXITY]` Method 'test_thread_safety' has high cyclomatic complexity (8 branch points), violating KISS _(at `/Volumes/External/Code/littlefs_v2/src/tests/test_main.cpp:1:1`)_
-- **+35%** `[KISS_KISS_DECOMPOSITION_NEEDED]` Complex nested conditionals are difficult to test and maintain; decompose into smaller functions _(at `/Volumes/External/Code/littlefs_v2/src/tests/test_main.cpp:1:1`)_
-
----
-
-### #6 KISS on kiss_cyclomatic_complexity `lfs_dir_getslice`
+### #2 KISS on kiss_cyclomatic_complexity `lfs_dir_getslice`
 - **Confidence:** 88% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_metadata.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_metadata.cpp)
 - **Summary:** KISS Violation (High Complexity): Method 'lfs_dir_getslice' has 8 control flow branches
@@ -84,7 +40,7 @@
 
 ---
 
-### #7 KISS on kiss_cyclomatic_complexity `lfs_dir_find`
+### #3 KISS on kiss_cyclomatic_complexity `lfs_dir_find`
 - **Confidence:** 88% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_metadata.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_metadata.cpp)
 - **Summary:** KISS Violation (High Complexity): Method 'lfs_dir_find' has 15 control flow branches
@@ -95,7 +51,7 @@
 
 ---
 
-### #8 KISS on kiss_cyclomatic_complexity `lfs_init`
+### #4 KISS on kiss_cyclomatic_complexity `lfs_init`
 - **Confidence:** 88% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_general.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_general.cpp)
 - **Summary:** KISS Violation (High Complexity): Method 'lfs_init' has 15 control flow branches
@@ -106,7 +62,7 @@
 
 ---
 
-### #9 KISS on kiss_cyclomatic_complexity `lfs_raw_remove`
+### #5 KISS on kiss_cyclomatic_complexity `lfs_raw_remove`
 - **Confidence:** 88% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_general.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_general.cpp)
 - **Summary:** KISS Violation (High Complexity): Method 'lfs_raw_remove' has 12 control flow branches
@@ -117,7 +73,7 @@
 
 ---
 
-### #10 KISS on kiss_cyclomatic_complexity `lfs_raw_rename`
+### #6 KISS on kiss_cyclomatic_complexity `lfs_raw_rename`
 - **Confidence:** 88% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_general.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_general.cpp)
 - **Summary:** KISS Violation (High Complexity): Method 'lfs_raw_rename' has 21 control flow branches
@@ -128,7 +84,7 @@
 
 ---
 
-### #11 KISS on kiss_cyclomatic_complexity `lfs_raw_mount`
+### #7 KISS on kiss_cyclomatic_complexity `lfs_raw_mount`
 - **Confidence:** 88% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_general.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_general.cpp)
 - **Summary:** KISS Violation (High Complexity): Method 'lfs_raw_mount' has 29 control flow branches
@@ -139,7 +95,7 @@
 
 ---
 
-### #12 KISS on kiss_cyclomatic_complexity `lfs_dir_commit_crc`
+### #8 KISS on kiss_cyclomatic_complexity `lfs_dir_commit_crc`
 - **Confidence:** 88% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_commit.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_commit.cpp)
 - **Summary:** KISS Violation (High Complexity): Method 'lfs_dir_commit_crc' has 12 control flow branches
@@ -150,7 +106,7 @@
 
 ---
 
-### #13 KISS on kiss_cyclomatic_complexity `lfs_dir_compact`
+### #9 KISS on kiss_cyclomatic_complexity `lfs_dir_compact`
 - **Confidence:** 88% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_commit.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_commit.cpp)
 - **Summary:** KISS Violation (High Complexity): Method 'lfs_dir_compact' has 22 control flow branches
@@ -161,7 +117,7 @@
 
 ---
 
-### #14 KISS on kiss_cyclomatic_complexity `lfs_dir_splittingcompact`
+### #10 KISS on kiss_cyclomatic_complexity `lfs_dir_splittingcompact`
 - **Confidence:** 88% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_commit.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_commit.cpp)
 - **Summary:** KISS Violation (High Complexity): Method 'lfs_dir_splittingcompact' has 12 control flow branches
@@ -172,7 +128,7 @@
 
 ---
 
-### #15 KISS on kiss_cyclomatic_complexity `lfs_dir_relocating_commit`
+### #11 KISS on kiss_cyclomatic_complexity `lfs_dir_relocating_commit`
 - **Confidence:** 88% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_commit.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_commit.cpp)
 - **Summary:** KISS Violation (High Complexity): Method 'lfs_dir_relocating_commit' has 28 control flow branches
@@ -183,7 +139,7 @@
 
 ---
 
-### #16 KISS on kiss_cyclomatic_complexity `lfs_dir_orphaning_commit`
+### #12 KISS on kiss_cyclomatic_complexity `lfs_dir_orphaning_commit`
 - **Confidence:** 88% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_commit.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_commit.cpp)
 - **Summary:** KISS Violation (High Complexity): Method 'lfs_dir_orphaning_commit' has 29 control flow branches
@@ -194,7 +150,7 @@
 
 ---
 
-### #17 KISS on kiss_cyclomatic_complexity `lfs_bd_read`
+### #13 KISS on kiss_cyclomatic_complexity `lfs_bd_read`
 - **Confidence:** 88% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_device.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_device.cpp)
 - **Summary:** KISS Violation (High Complexity): Method 'lfs_bd_read' has 9 control flow branches
@@ -205,7 +161,7 @@
 
 ---
 
-### #18 KISS on kiss_cyclomatic_complexity `lfs_ctz_extend`
+### #14 KISS on kiss_cyclomatic_complexity `lfs_ctz_extend`
 - **Confidence:** 88% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_file_index.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_file_index.cpp)
 - **Summary:** KISS Violation (High Complexity): Method 'lfs_ctz_extend' has 15 control flow branches
@@ -216,7 +172,7 @@
 
 ---
 
-### #19 KISS on kiss_cyclomatic_complexity `lfs_file_rawopencfg`
+### #15 KISS on kiss_cyclomatic_complexity `lfs_file_rawopencfg`
 - **Confidence:** 88% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_file.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_file.cpp)
 - **Summary:** KISS Violation (High Complexity): Method 'lfs_file_rawopencfg' has 22 control flow branches
@@ -227,7 +183,7 @@
 
 ---
 
-### #20 KISS on kiss_cyclomatic_complexity `lfs_file_relocate`
+### #16 KISS on kiss_cyclomatic_complexity `lfs_file_relocate`
 - **Confidence:** 88% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_file.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_file.cpp)
 - **Summary:** KISS Violation (High Complexity): Method 'lfs_file_relocate' has 10 control flow branches
@@ -238,7 +194,7 @@
 
 ---
 
-### #21 KISS on kiss_cyclomatic_complexity `lfs_file_flush`
+### #17 KISS on kiss_cyclomatic_complexity `lfs_file_flush`
 - **Confidence:** 88% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_file.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_file.cpp)
 - **Summary:** KISS Violation (High Complexity): Method 'lfs_file_flush' has 12 control flow branches
@@ -249,7 +205,7 @@
 
 ---
 
-### #22 KISS on kiss_cyclomatic_complexity `lfs_file_flushedread`
+### #18 KISS on kiss_cyclomatic_complexity `lfs_file_flushedread`
 - **Confidence:** 88% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_file.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_file.cpp)
 - **Summary:** KISS Violation (High Complexity): Method 'lfs_file_flushedread' has 8 control flow branches
@@ -260,7 +216,7 @@
 
 ---
 
-### #23 KISS on kiss_cyclomatic_complexity `lfs_file_flushedwrite`
+### #19 KISS on kiss_cyclomatic_complexity `lfs_file_flushedwrite`
 - **Confidence:** 88% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_file.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_file.cpp)
 - **Summary:** KISS Violation (High Complexity): Method 'lfs_file_flushedwrite' has 12 control flow branches
@@ -271,7 +227,7 @@
 
 ---
 
-### #24 KISS on kiss_cyclomatic_complexity `lfs_file_rawwrite`
+### #20 KISS on kiss_cyclomatic_complexity `lfs_file_rawwrite`
 - **Confidence:** 88% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_file.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_file.cpp)
 - **Summary:** KISS Violation (High Complexity): Method 'lfs_file_rawwrite' has 8 control flow branches
@@ -282,7 +238,7 @@
 
 ---
 
-### #25 KISS on kiss_cyclomatic_complexity `lfs_file_rawseek`
+### #21 KISS on kiss_cyclomatic_complexity `lfs_file_rawseek`
 - **Confidence:** 88% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_file.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_file.cpp)
 - **Summary:** KISS Violation (High Complexity): Method 'lfs_file_rawseek' has 10 control flow branches
@@ -293,7 +249,7 @@
 
 ---
 
-### #26 KISS on kiss_cyclomatic_complexity `lfs_file_rawtruncate`
+### #22 KISS on kiss_cyclomatic_complexity `lfs_file_rawtruncate`
 - **Confidence:** 88% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_file.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_file.cpp)
 - **Summary:** KISS Violation (High Complexity): Method 'lfs_file_rawtruncate' has 12 control flow branches
@@ -304,7 +260,7 @@
 
 ---
 
-### #27 KISS on kiss_cyclomatic_complexity `lfs_dir_rawcreate`
+### #23 KISS on kiss_cyclomatic_complexity `lfs_dir_rawcreate`
 - **Confidence:** 88% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_directory.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_directory.cpp)
 - **Summary:** KISS Violation (High Complexity): Method 'lfs_dir_rawcreate' has 12 control flow branches
@@ -315,7 +271,7 @@
 
 ---
 
-### #28 KISS on kiss_cyclomatic_complexity `lfs_dir_rawread`
+### #24 KISS on kiss_cyclomatic_complexity `lfs_dir_rawread`
 - **Confidence:** 88% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_directory.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_directory.cpp)
 - **Summary:** KISS Violation (High Complexity): Method 'lfs_dir_rawread' has 8 control flow branches
@@ -326,7 +282,7 @@
 
 ---
 
-### #29 KISS on kiss_cyclomatic_complexity `lfs_fs_deorphan`
+### #25 KISS on kiss_cyclomatic_complexity `lfs_fs_deorphan`
 - **Confidence:** 88% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_operations.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_operations.cpp)
 - **Summary:** KISS Violation (High Complexity): Method 'lfs_fs_deorphan' has 19 control flow branches
@@ -337,7 +293,7 @@
 
 ---
 
-### #30 OPEN_CLOSED on ocp_polymorphic_hierarchy `IBlockDevice`
+### #26 OPEN_CLOSED on ocp_polymorphic_hierarchy `IBlockDevice`
 - **Confidence:** 87% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1`](/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h)
 - **Summary:** OCP Adherence: Interface 'IBlockDevice' supports open extension with 4 implementations
@@ -354,7 +310,7 @@
 
 ---
 
-### #31 STRATEGY on protocol_strategy `IBlockDevice`
+### #27 STRATEGY on protocol_strategy `IBlockDevice`
 - **Confidence:** 86% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1`](/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h)
 - **Summary:** Strategy pattern: protocol 'IBlockDevice' with 4 interchangeable concrete implementations
@@ -374,7 +330,7 @@
 
 ---
 
-### #32 SINGLE_RESPONSIBILITY on god_class_srp_violation `lfsVFS`
+### #28 SINGLE_RESPONSIBILITY on god_class_srp_violation `lfsVFS`
 - **Confidence:** 86% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.h:1:1`](/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.h)
 - **Summary:** SRP Violation (God Class): 'lfsVFS' mixes 2 concerns across 13 methods
@@ -386,7 +342,7 @@
 
 ---
 
-### #33 INTERFACE_SEGREGATION on fat_interface_isp_violation `FileBlockDevice`
+### #29 INTERFACE_SEGREGATION on fat_interface_isp_violation `FileBlockDevice`
 - **Confidence:** 86% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1`](/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h)
 - **Summary:** ISP Violation (Fat Interface): 'FileBlockDevice' has 14 methods; should be split into smaller role interfaces
@@ -397,7 +353,7 @@
 
 ---
 
-### #34 INTERFACE_SEGREGATION on fat_interface_isp_violation `FaultInjectBlockDevice`
+### #30 INTERFACE_SEGREGATION on fat_interface_isp_violation `FaultInjectBlockDevice`
 - **Confidence:** 86% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1`](/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h)
 - **Summary:** ISP Violation (Fat Interface): 'FaultInjectBlockDevice' has 12 methods; should be split into smaller role interfaces
@@ -408,7 +364,7 @@
 
 ---
 
-### #35 INTERFACE_SEGREGATION on fat_interface_isp_violation `VFSFileObject`
+### #31 INTERFACE_SEGREGATION on fat_interface_isp_violation `VFSFileObject`
 - **Confidence:** 86% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.cpp)
 - **Summary:** ISP Violation (Fat Interface): 'VFSFileObject' has 13 methods; should be split into smaller role interfaces
@@ -419,7 +375,7 @@
 
 ---
 
-### #36 INTERFACE_SEGREGATION on fat_interface_isp_violation `IFileObject`
+### #32 INTERFACE_SEGREGATION on fat_interface_isp_violation `IFileObject`
 - **Confidence:** 86% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.h:1:1`](/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.h)
 - **Summary:** ISP Violation (Fat Interface): 'IFileObject' has 8 methods; should be split into smaller role interfaces
@@ -430,7 +386,7 @@
 
 ---
 
-### #37 INTERFACE_SEGREGATION on fat_interface_isp_violation `IFileSystemDevice`
+### #33 INTERFACE_SEGREGATION on fat_interface_isp_violation `IFileSystemDevice`
 - **Confidence:** 86% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.h:1:1`](/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.h)
 - **Summary:** ISP Violation (Fat Interface): 'IFileSystemDevice' has 10 methods; should be split into smaller role interfaces
@@ -441,18 +397,7 @@
 
 ---
 
-### #38 LAW_OF_DEMETER on law_of_demeter_train_wreck `lfs_fuse_readdir`
-- **Confidence:** 85% (🟢 `VERY_HIGH`)
-- **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/example/lfs_fuse.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/example/lfs_fuse.cpp)
-- **Summary:** Law of Demeter Violation in 'lfs_fuse_readdir': deep chain 'entry.getPath().c_str()'
-
-#### 🔎 Evidence Trail:
-- **+64%** `[LAW_OF_DEMETER_LOD_TRAIN_WRECK_CHAIN]` Method 'lfs_fuse_readdir' violates Law of Demeter with deep chained call: 'entry.getPath().c_str()' _(at `/Volumes/External/Code/littlefs_v2/src/example/lfs_fuse.cpp:1:1`)_
-- **+35%** `[LAW_OF_DEMETER_LOD_STRUCTURAL_COUPLING]` Navigating internal object structures breaks encapsulation and couples caller to indirect dependencies _(at `/Volumes/External/Code/littlefs_v2/src/example/lfs_fuse.cpp:1:1`)_
-
----
-
-### #39 KISS on kiss_complexity_parameters `lfs_fuse_readdir`
+### #34 KISS on kiss_complexity_parameters `lfs_fuse_readdir`
 - **Confidence:** 85% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/example/lfs_fuse.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/example/lfs_fuse.cpp)
 - **Summary:** KISS Violation (Long Parameter List): Method 'lfs_fuse_readdir' takes 6 parameters
@@ -463,7 +408,7 @@
 
 ---
 
-### #40 KISS on kiss_complexity_parameters `lfs_dir_getslice`
+### #35 KISS on kiss_complexity_parameters `lfs_dir_getslice`
 - **Confidence:** 85% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_metadata.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_metadata.cpp)
 - **Summary:** KISS Violation (Long Parameter List): Method 'lfs_dir_getslice' takes 7 parameters
@@ -474,7 +419,7 @@
 
 ---
 
-### #41 KISS on kiss_complexity_parameters `lfs_dir_getread`
+### #36 KISS on kiss_complexity_parameters `lfs_dir_getread`
 - **Confidence:** 85% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_metadata.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_metadata.cpp)
 - **Summary:** KISS Violation (Long Parameter List): Method 'lfs_dir_getread' takes 10 parameters
@@ -485,7 +430,7 @@
 
 ---
 
-### #42 KISS on kiss_complexity_parameters `lfs_dir_split`
+### #37 KISS on kiss_complexity_parameters `lfs_dir_split`
 - **Confidence:** 85% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_commit.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_commit.cpp)
 - **Summary:** KISS Violation (Long Parameter List): Method 'lfs_dir_split' takes 7 parameters
@@ -496,7 +441,7 @@
 
 ---
 
-### #43 KISS on kiss_complexity_parameters `lfs_dir_compact`
+### #38 KISS on kiss_complexity_parameters `lfs_dir_compact`
 - **Confidence:** 85% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_commit.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_commit.cpp)
 - **Summary:** KISS Violation (Long Parameter List): Method 'lfs_dir_compact' takes 7 parameters
@@ -507,7 +452,7 @@
 
 ---
 
-### #44 KISS on kiss_complexity_parameters `lfs_dir_splittingcompact`
+### #39 KISS on kiss_complexity_parameters `lfs_dir_splittingcompact`
 - **Confidence:** 85% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_commit.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_commit.cpp)
 - **Summary:** KISS Violation (Long Parameter List): Method 'lfs_dir_splittingcompact' takes 7 parameters
@@ -518,7 +463,7 @@
 
 ---
 
-### #45 KISS on kiss_complexity_parameters `lfs_dir_relocating_commit`
+### #40 KISS on kiss_complexity_parameters `lfs_dir_relocating_commit`
 - **Confidence:** 85% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_commit.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_commit.cpp)
 - **Summary:** KISS Violation (Long Parameter List): Method 'lfs_dir_relocating_commit' takes 6 parameters
@@ -529,7 +474,7 @@
 
 ---
 
-### #46 KISS on kiss_complexity_parameters `lfs_bd_read`
+### #41 KISS on kiss_complexity_parameters `lfs_bd_read`
 - **Confidence:** 85% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_device.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_device.cpp)
 - **Summary:** KISS Violation (Long Parameter List): Method 'lfs_bd_read' takes 8 parameters
@@ -540,7 +485,7 @@
 
 ---
 
-### #47 KISS on kiss_complexity_parameters `lfs_bd_cmp`
+### #42 KISS on kiss_complexity_parameters `lfs_bd_cmp`
 - **Confidence:** 85% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_device.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_device.cpp)
 - **Summary:** KISS Violation (Long Parameter List): Method 'lfs_bd_cmp' takes 8 parameters
@@ -551,7 +496,7 @@
 
 ---
 
-### #48 KISS on kiss_complexity_parameters `lfs_bd_write`
+### #43 KISS on kiss_complexity_parameters `lfs_bd_write`
 - **Confidence:** 85% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_device.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_device.cpp)
 - **Summary:** KISS Violation (Long Parameter List): Method 'lfs_bd_write' takes 8 parameters
@@ -562,7 +507,7 @@
 
 ---
 
-### #49 KISS on kiss_complexity_parameters `lfs_ctz_find`
+### #44 KISS on kiss_complexity_parameters `lfs_ctz_find`
 - **Confidence:** 85% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_file_index.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_file_index.cpp)
 - **Summary:** KISS Violation (Long Parameter List): Method 'lfs_ctz_find' takes 8 parameters
@@ -573,7 +518,7 @@
 
 ---
 
-### #50 KISS on kiss_complexity_parameters `lfs_ctz_extend`
+### #45 KISS on kiss_complexity_parameters `lfs_ctz_extend`
 - **Confidence:** 85% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_file_index.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_file_index.cpp)
 - **Summary:** KISS Violation (Long Parameter List): Method 'lfs_ctz_extend' takes 7 parameters
@@ -584,7 +529,7 @@
 
 ---
 
-### #51 DEPENDENCY_INVERSION on dip_interface_dependency `VFSFileObject`
+### #46 DEPENDENCY_INVERSION on dip_interface_dependency `VFSFileObject`
 - **Confidence:** 83% (🔵 `HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.cpp)
 - **Summary:** DIP Adherence: 'VFSFileObject' depends on interface abstraction(s) (ErrorCode)
@@ -595,7 +540,7 @@
 
 ---
 
-### #52 DEPENDENCY_INVERSION on dip_interface_dependency `lfs_disk_offset_t`
+### #47 DEPENDENCY_INVERSION on dip_interface_dependency `lfs_disk_offset_t`
 - **Confidence:** 83% (🔵 `HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/include/lfs.h:1:1`](/Volumes/External/Code/littlefs_v2/include/lfs.h)
 - **Summary:** DIP Adherence: 'lfs_disk_offset_t' depends on interface abstraction(s) (CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice)
@@ -606,7 +551,7 @@
 
 ---
 
-### #53 DEPENDENCY_INVERSION on dip_interface_dependency `lfs_commit_t`
+### #48 DEPENDENCY_INVERSION on dip_interface_dependency `lfs_commit_t`
 - **Confidence:** 83% (🔵 `HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/include/lfs.h:1:1`](/Volumes/External/Code/littlefs_v2/include/lfs.h)
 - **Summary:** DIP Adherence: 'lfs_commit_t' depends on interface abstraction(s) (CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice)
@@ -617,7 +562,7 @@
 
 ---
 
-### #54 DEPENDENCY_INVERSION on dip_interface_dependency `lfs_cache_t`
+### #49 DEPENDENCY_INVERSION on dip_interface_dependency `lfs_cache_t`
 - **Confidence:** 83% (🔵 `HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/include/lfs.h:1:1`](/Volumes/External/Code/littlefs_v2/include/lfs.h)
 - **Summary:** DIP Adherence: 'lfs_cache_t' depends on interface abstraction(s) (CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice)
@@ -628,7 +573,7 @@
 
 ---
 
-### #55 DEPENDENCY_INVERSION on dip_interface_dependency `lfs_file_t`
+### #50 DEPENDENCY_INVERSION on dip_interface_dependency `lfs_file_t`
 - **Confidence:** 83% (🔵 `HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/include/lfs.h:1:1`](/Volumes/External/Code/littlefs_v2/include/lfs.h)
 - **Summary:** DIP Adherence: 'lfs_file_t' depends on interface abstraction(s) (CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice)
@@ -639,7 +584,7 @@
 
 ---
 
-### #56 DEPENDENCY_INVERSION on dip_interface_dependency `lfs_free_t`
+### #51 DEPENDENCY_INVERSION on dip_interface_dependency `lfs_free_t`
 - **Confidence:** 83% (🔵 `HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/include/lfs.h:1:1`](/Volumes/External/Code/littlefs_v2/include/lfs.h)
 - **Summary:** DIP Adherence: 'lfs_free_t' depends on interface abstraction(s) (CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice, IFileObject, IFileSystemDevice, VFSFileObject)
@@ -650,7 +595,7 @@
 
 ---
 
-### #57 TEMPLATE_METHOD on template_method_protocol `IFileObject`
+### #52 TEMPLATE_METHOD on template_method_protocol `IFileObject`
 - **Confidence:** 80% (🔵 `HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.h:1:1`](/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.h)
 - **Summary:** Template Method pattern: 'IFileObject' defines skeleton of algorithm in base class
@@ -664,7 +609,7 @@
 
 ---
 
-### #58 TEMPLATE_METHOD on template_method_protocol `VFSFileObject`
+### #53 TEMPLATE_METHOD on template_method_protocol `VFSFileObject`
 - **Confidence:** 69% (🟡 `MEDIUM`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.cpp)
 - **Summary:** Template Method pattern: 'VFSFileObject' defines skeleton of algorithm in base class
