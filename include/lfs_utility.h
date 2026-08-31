@@ -332,6 +332,28 @@ constexpr inline bool lfs_tag_isdelete(lfs_tag_t tag) {
     return ((int32_t)(tag << 22) >> 22) == -1;
 }
 
+constexpr inline uint8_t lfs_tag_chunk(lfs_tag_t tag) {
+    return (tag & 0x0ff00000) >> 20;
+}
+
+constexpr inline int8_t lfs_tag_splice(lfs_tag_t tag) {
+    return (int8_t)lfs_tag_chunk(tag);
+}
+
+constexpr inline lfs_size_t lfs_tag_dsize(lfs_tag_t tag) {
+    return sizeof(tag) + lfs_tag_size(tag + lfs_tag_isdelete(tag));
+}
+
+constexpr inline void lfs_ctz_fromle64(lfs_ctz_t* ctz) {
+    ctz->head = lfs_fromle64(ctz->head);
+    ctz->size = lfs_fromle64(ctz->size);
+}
+
+constexpr inline void lfs_ctz_tole64(lfs_ctz_t* ctz) {
+    ctz->head = lfs_tole64(ctz->head);
+    ctz->size = lfs_tole64(ctz->size);
+}
+
 #define LFS_MKTAG(type, id, size) \
     (((lfs_tag_t)(type) << 20) | ((lfs_tag_t)(id) << 10) | (lfs_tag_t)(size))
 
@@ -385,8 +407,22 @@ inline void lfs_gstate_tole64(lfs_gstate_t* a) {
     a->pair[1] = lfs_tole64(a->pair[1]);
 }
 
-// CRC32 calculation
-uint32_t lfs_crc(uint32_t crc, const void* buffer, size_t size);
+// Software CRC implementation with small lookup table
+constexpr inline uint32_t lfs_crc(uint32_t crc, const void* buffer, size_t size) {
+    const uint32_t rtable[16] = {
+        0x00000000, 0x1db71064, 0x3b6e20c8, 0x26d930ac,
+        0x76dc4190, 0x6b6b51f4, 0x4db26158, 0x5005713c,
+        0xedb88320, 0xf00f9344, 0xd6d6a3e8, 0xcb61b38c,
+        0x9b64c2b0, 0x86d3d2d4, 0xa00ae278, 0xbdbdf21c,
+    };
+
+    const uint8_t* data = (const uint8_t*)buffer;
+    for (size_t i = 0; i < size; i++) {
+        crc = (crc >> 4) ^ rtable[(crc ^ (data[i] >> 0)) & 0xf];
+        crc = (crc >> 4) ^ rtable[(crc ^ (data[i] >> 4)) & 0xf];
+    }
+    return crc;
+}
 
 // linked list operations
 constexpr inline bool lfs_mlist_isopen(lfs_metadata_list_t* head, lfs_metadata_list_t* node) {
