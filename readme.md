@@ -1,120 +1,169 @@
-# littlefs v2 — High-Performance Virtual File System (VFS)
+# littlefs v2 — High-Performance Thread-Safe Virtual File System (VFS)
 
-`littlefs_v2` — это глубоко рефакторенная C++ модификация [littlefs](https://github.com/littlefs-project/littlefs), расширенная слоем **High-Performance VFS Page Cache**, поддержкой произвольного доступа $O(1)$, драйвером **Linux FUSE 3** и устойчивостью к аварийному отключению питания (Power-Loss Resilience).
-
----
-
-## 🌟 Ключевые Особенности (Features)
-
-* **Современная C++ Архитектура**: Высокоуровневая абстракция с объектами `IFileSystemDevice` и `IFileObject`.
-* **High-Performance Page Cache Layer**:
-  * $O(1)$ произвольный поиск (`seek`), чтение (`read`) и определение размера (`size`) в RAM.
-  * Пакетный сброс страниц (`Batched Flush`): агрегация 2 000+ мелких произвольных записей в один проход, предотвращающая деградацию производительности каскадных переписок CTZ skip-list.
-* **Поддержка Огромных Файлов**: Максимальный размер файла расширен до `0x7FFFFFFFFFFFFFFF` (8 Эксабайт).
-* **Динамический Auto-Grow диска**: Автоматическое расширение размера виртуального диска на лету без размонтирования ФС.
-* **Два Бэкенда Хранения (Dual-Backend)**:
-  1. `kFileBackend`: Хранение контейнера в дисковом файле (`.vfs` / `.bin`).
-  2. `kMemoryBackend`: Высокоскоростное хранение в оперативной памяти (RAM).
-* **Linux FUSE 3 Driver**: Монтирование виртуальных `.vfs` контейнеров напрямую в файловую систему ОС Linux (`lfs_fuse`).
-* **Кроссплатформенность**: Поддержка Windows, macOS и Linux (MSVC, Clang, GCC).
+`littlefs_v2` — a modernized, modular C++ implementation of [ARM littlefs](https://github.com/littlefs-project/littlefs) extended with **Thread-Safe VFS**, **High-Performance Page Cache**, **Pluggable Block Device Decorators (Crypto & Fault-Injection)**, **Linux FUSE 3 driver**, and **Ninja** build system.
 
 ---
 
-## 📊 Замеры Производительности (Performance Benchmark)
+## 🌟 Key Features & Architecture
 
-*Замеры на файле размером 1 МБ (1 048 576 байт):*
+* **Modular C++ Architecture**: Decoupled the original monolithic C codebase into dedicated, maintainable modules (`lfs_allocator`, `lfs_commit`, `lfs_directory`, `lfs_file`, `lfs_file_index`, `lfs_metadata`, `lfs_operations`, `lfs_toplevel`).
+* **Thread-Safety & Locking**: Built-in recursive mutex locking across all VFS and file handle operations (`LFS_THREADSAFE`), ensuring full safety in concurrent multi-threaded environments.
+* **Modern Error Handling & RAII**:
+  * `fs::Result<T, ErrorCode>` type eliminating raw negative error codes and enabling ergonomic value/error checking.
+  * Move-only RAII `fs::FileHandle` that guarantees automatic `flush()` and `close()` upon destruction.
+* **64-bit Sizes & Offsets**: All block numbers, sizes, and file offsets upgraded to 64-bit integers (`uint64_t`), enabling file sizes up to `0x7FFFFFFFFFFFFFFF` (8 EiB).
+* **Dynamic Disk Auto-Grow**: Automatic storage capacity expansion on demand (`lfs_fs_grow`) without unmounting or remounting.
+* **Pluggable Block Device & Decorator Layer**:
+  * `fs::IBlockDevice` abstraction interface.
+  * `MemoryBlockDevice`: Ultra-fast in-RAM virtual filesystem.
+  * `FileBlockDevice`: Host-file container acting as a virtual disk.
+  * `CryptoBlockDevice`: Transparent per-block cryptographic scrambler / encryption decorator.
+  * `FaultInjectBlockDevice`: Chaos simulator for write errors and sudden power-loss events.
+* **Linux FUSE 3 Driver**: Mount virtual `.vfs` containers directly into Linux filesystem namespace (`lfs_fuse`).
 
-| Операция | Объем / Кол-во | Время выполнения | Средняя скорость |
+---
+
+## 📊 Performance Benchmarks (Page Cache & VFS)
+
+*Measurements on 1 MB file (1,048,576 bytes):*
+
+| Operation | Volume / Count | Elapsed Time | Throughput |
 | :--- | :---: | :---: | :---: |
-| **Последовательная запись** | 1 МБ | **`8.18 ms`** | `128 MB/s` |
-| **Случайный Seek & Read (RAM)** | 10 000 операций | **`0.83 ms`** | **`83 ns / op`** |
-| **Случайная перезапись (Page Cache)** | 2 000 операций | **`0.17 ms`** | **`88 ns / op`** |
-| **Пакетный сброс на диск (Batched Flush)** | 2 000 записей | **`0.47 ms`** | `< 0.5 ms` |
-| **Сканирование каталогов (Directory Scan)** | 1 000 файлов | **`15.33 ms`** | `15 us / file` |
+| **Sequential Write** | 1 MB | **`8.18 ms`** | `128 MB/s` |
+| **Random Seek & Read (RAM)** | 10,000 ops | **`0.83 ms`** | **`83 ns / op`** |
+| **Random Overwrite (Page Cache)** | 2,000 ops | **`0.17 ms`** | **`88 ns / op`** |
+| **Batched Flush to Disk** | 2,000 writes | **`0.47 ms`** | `< 0.5 ms` |
+| **Directory Scan** | 1,000 files | **`15.33 ms`** | `15 us / file` |
 
 ---
 
-## ⚡ Устойчивость к Сбоям Питания и Крайним Сценариям (Edge Cases & Resilience)
+## ⚡ Power-Loss Resilience & Chaos Tests
 
-* **Edge Cases Test Suite (`src/example/edge_cases_test.cpp`)**: 50 ассертов, проверяющих работу с 0-байтовыми файлами, выходом поиска за границы EOF, невыравниванием записей по границам страниц (Page Straddling, 4096 B), флагами создания и усечением файлов.
-* **Power-Loss Crash Recovery (`src/example/power_loss_test.cpp`)**: **`0% Metadata Corruption`**. Все ранее зафиксированные состояния на 100% сохраняются, а метаданные файловой системы автоматически самовосстанавливаются после аварийного перезапуска.
-
----
-
-## 📁 Структура Проекта и Демо-Примеры
-
-```text
-littlefs_v2/
-├── include/                   # Заголовочные файлы littlefs_v2 (lfs.h, lfs_utility.h)
-├── src/
-│   ├── littlefs_v2/           # Исходный код C++ ядра littlefs_v2
-│   └── example/
-│       ├── lfs_interface.h    # Интерфейсы VFS (IFileSystemDevice, IFileObject)
-│       ├── lfs_interface.cpp  # Реализация VFS и Page Cache
-│       ├── asset_vault_example.cpp # Демо-проект: Архив 1 000 мелких файлов ресурсов
-│       ├── edge_cases_test.cpp# Набор тестов edge cases (50 проверок)
-│       ├── lfs_fuse.cpp       # Драйвер Linux FUSE 3
-│       ├── power_loss_test.cpp# Тестовый комплекс на сбои питания
-│       └── vfs_tests.cpp      # Unit-тесты (46 проверок)
-└── docs/
-    └── vfs_value_and_architecture.md # Коммерческая и техническая документация
-```
+* **Unit & Concurrency Test Suite (`src/tests/test_main.cpp`)**: Verifies CRUD, Auto-Grow, 8-thread concurrent read/write stress, and Crypto Block Device.
+* **Fault Injection & Power-Loss Recovery**: **`0% Metadata Corruption`**. Injected write failures recover cleanly to the previous consistent revision state via LittleFS dual-block logging and CRC verification.
 
 ---
 
-## 🚀 Быстрый Старт (Usage Example)
+## 🚀 Quick Start / Usage Example
 
 ```cpp
+#include <iostream>
 #include "lfs_interface.h"
 
 int main() {
-    std::shared_ptr<fs::IFileSystemDevice> vfs;
-    
-    // Создаем VFS-контейнер на диске
-    if (fs::createVFS(L"my_container.vfs", vfs, fs::lfsVFS::Backend::kFileBackend) == fs::kCodeOK) {
-        std::shared_ptr<fs::IFileObject> file;
+    // 1. Create an in-memory or file-backed VFS
+    auto dev = std::make_shared<fs::MemoryBlockDevice>(64 * 1024, 8);
+    auto vfs_res = fs::createVFSWithDevice(dev);
+    if (!vfs_res.has_value()) {
+        std::cerr << "Failed to create VFS" << std::endl;
+        return 1;
+    }
+    auto vfs = vfs_res.value();
+
+    // 2. Open, write, and read using modern RAII FileHandle
+    auto file_res = vfs->open("hello.txt", fs::kFileRead | fs::kFileWrite | fs::kFileCreateIfNotExists);
+    if (file_res.has_value()) {
+        fs::FileHandle file(file_res.value());
         
-        // Открываем / создаем файл внутри VFS
-        if (vfs->openFile(file, "hello.txt", fs::kFileWrite | fs::kFileCreateIfNotExists) == fs::kCodeOK) {
-            std::string data = "Hello littlefs_v2 VFS!";
-            file->write(data.c_str(), data.size());
-            file->flush(); // Сброс грязных страниц на диск
+        const std::string text = "Hello LittleFS v2 with Thread Safety & Modern C++!";
+        file->write(text.c_str(), text.size());
+        file->flush();
+
+        file->seek(0, fs::IFileObject::kSeekSet);
+        std::vector<char> buf(text.size() + 1, 0);
+        file->read(buf.data(), text.size());
+        std::cout << "Read from VFS: " << buf.data() << std::endl;
+    }
+
+    // 3. List directory entries
+    auto dir_res = vfs->listDir("/");
+    if (dir_res.has_value()) {
+        for (const auto& entry : dir_res.value()) {
+            std::cout << " - " << entry.getPath() << " (" << entry.getSize() << " bytes)\n";
         }
     }
+
     return 0;
 }
 ```
 
 ---
 
-## 🐧 Сборка и Монтирование Linux FUSE 3 Driver
+## 🛠 Build & Test (Ninja)
 
-В ОС Linux или виртуальной машине Linux (Ubuntu / Debian):
+The project uses CMake with **Ninja** build system and presets:
 
 ```bash
-# 1. Установите зависимости FUSE 3
+# Configure & build with Ninja via Presets
+cmake --preset default
+cmake --build --preset default
+
+# Run example
+./build/example
+
+# Run test suite
+./build/tests_runner
+```
+
+---
+
+## 🐧 Linux FUSE 3 Driver Build & Mount
+
+```bash
+# 1. Install FUSE 3 dependencies (Ubuntu / Debian)
 sudo apt-get update && sudo apt-get install -y libfuse3-dev build-essential pkg-config
 
-# 2. Скомпилируйте FUSE-драйвер
-g++ -std=c++17 -O2 -Iinclude -Isrc/example \
+# 2. Compile FUSE driver
+g++ -std=c++20 -O2 -Iinclude -Isrc/example \
     src/littlefs_v2/*.cpp src/example/lfs_interface.cpp src/example/lfs_fuse.cpp \
     -D_FILE_OFFSET_BITS=64 $(pkg-config --cflags --libs fuse3) -o littlefs_fuse
 
-# 3. Смонтируйте VFS контейнер в любой каталог
+# 3. Mount container
 mkdir -p /mnt/my_vfs
 ./littlefs_fuse /mnt/my_vfs
 
-# 4. Работайте как с обычной папкой Linux
+# 4. Use standard Linux commands
 echo "Hello from Linux terminal!" > /mnt/my_vfs/test.txt
 cat /mnt/my_vfs/test.txt
 
-# 5. Размонтирование
+# 5. Unmount
 fusermount3 -u /mnt/my_vfs
 ```
 
 ---
 
-## 📄 Документация
+## 📁 Project Structure
 
-Подробный коммерческий разбор практической ценности, ROI, экономии на IOPS и изоляции плагинов находится в документе:
-👉 [`docs/vfs_value_and_architecture.md`](file:///Volumes/External/Code/f/littlefs_v2/docs/vfs_value_and_architecture.md)
+```
+littlefs_v2/
+├── CMakeLists.txt             # Modern CMake build system
+├── CMakePresets.json          # Ninja presets (default, debug)
+├── include/
+│   ├── lfs.h                  # Core LittleFS definitions and configurations
+│   ├── lfs_utility.h          # Bit operations (ctz, clz, popcount), logging, and assertions
+│   ├── lfs_result.h           # Result<T, ErrorCode> error handling
+│   └── lfs_block_device.h     # IBlockDevice, Memory, File, Crypto, and Fault-Injection devices
+├── src/
+│   ├── littlefs_v2/           # Modular core LittleFS implementation
+│   │   ├── lfs_allocator.cpp    # Free space lookahead buffer and block allocation
+│   │   ├── lfs_commit.cpp       # Metadata commit logs, compaction, and splitting
+│   │   ├── lfs_device.cpp       # Block device I/O abstraction and caching
+│   │   ├── lfs_directory.cpp    # Directory management and path traversal
+│   │   ├── lfs_file.cpp         # File I/O operations (read, write, seek, truncate)
+│   │   ├── lfs_file_index.cpp   # CTZ skip-list index operations
+│   │   ├── lfs_general.cpp      # Mount, format, superblock, and fs traversal
+│   │   ├── lfs_metadata.cpp     # Tag/slice operations and attribute fetching
+│   │   ├── lfs_operations.cpp   # File stat, remove, rename, and fs growth
+│   │   └── lfs_toplevel.cpp     # Public API entry points (with thread safety)
+│   ├── example/               # C++ VFS interface, backends, and FUSE
+│   │   ├── lfs_interface.h      # IFileSystemDevice, IFileObject, FileHandle
+│   │   ├── lfs_interface.cpp    # Thread-safe VFS implementation and block device bridge
+│   │   ├── lfs_fuse.cpp         # Linux FUSE 3 driver
+│   │   ├── file_backend.h       # File backend adapter
+│   │   ├── memory_backend.h     # Memory backend adapter
+│   │   └── example.cpp          # Demo application
+│   └── tests/                 # Verification & Chaos Test Suite
+│       └── test_main.cpp        # Tests: CRUD, Auto-Grow, Concurrency, Crypto, Fault-Injection
+└── docs/
+    └── vfs_value_and_architecture.md # Technical and architectural documentation
+```
