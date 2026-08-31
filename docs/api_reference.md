@@ -168,30 +168,70 @@ public:
 
 1. **`fs::MemoryBlockDevice`**:
    * Stores blocks in `std::vector<uint8_t>`.
-   * Ultra-fast (up to 16.8 GB/s read, 3.7 GB/s write).
+   * Ultra-fast (up to 19.6 GB/s read, 4.2 GB/s write).
 
 2. **`fs::FileBlockDevice`**:
    * Uses host-OS 64-bit file streams (`fseeko` / `_fseeki64`).
    * Supports persistent disk containers (`.vfs` / `.bin`).
 
-3. **`fs::CryptoBlockDevice` (Decorator)**:
+3. **`fs::BlockDeviceDecorator` (Base Decorator)**:
+   * Abstract GoF Decorator base forwarding all calls to `_underlying`.
+
+4. **`fs::CryptoBlockDevice` (Decorator)**:
    * Wraps any `IBlockDevice` and applies per-block cryptographic keystream scrambling on `write()` and `read()`.
 
-4. **`fs::FaultInjectBlockDevice` (Decorator)**:
+5. **`fs::StatisticsBlockDevice` (Decorator)**:
+   * Real-time monitoring of IOPS, reads, writes, erases, and total bytes transferred.
+
+6. **`fs::FaultInjectBlockDevice` (Decorator)**:
    * Intercepts I/O calls to simulate write failure after $N$ operations or inject bit corruptions for chaos testing.
 
 ---
 
-## 5. Factory & Lifecycle Functions
+## 5. Builder Pattern (VFSBuilder) & Factory
+
+Fluent construction of Virtual File Systems with composable decorators:
 
 ```cpp
-namespace fs {
-    // Generic device factory
-    Result<std::shared_ptr<IFileSystemDevice>> createVFSWithDevice(std::shared_ptr<IBlockDevice> device);
-    Result<std::shared_ptr<IFileSystemDevice>> openVFSWithDevice(std::shared_ptr<IBlockDevice> device);
+auto vfs_res = fs::VFSBuilder()
+    .withMemoryBackend(64 * 1024, 16)
+    .withCrypto(0xDEADBEEFCAFEBABEULL)
+    .withStatistics()
+    .buildCreate();
 
-    // Convenience helpers
-    LegacyErrorCode createVFS(const std::string& path, std::shared_ptr<IFileSystemDevice>& vfs, lfsVFS::Backend backend);
-    LegacyErrorCode openVFS(const std::string& path, std::shared_ptr<IFileSystemDevice>& vfs, lfsVFS::Backend backend);
+if (vfs_res) {
+    auto vfs = vfs_res.value();
+    // use vfs...
 }
 ```
+
+---
+
+## 6. Stream Adapters (VFSOutputStream & VFSInputStream)
+
+Adapter Pattern mapping `IFileObject` to standard C++ `std::istream` and `std::ostream`:
+
+```cpp
+// Writing with C++ << operator
+{
+    auto f = vfs->open("log.txt", fs::kFileWrite | fs::kFileCreateIfNotExists).value();
+    fs::VFSOutputStream os(f);
+    os << "Timestamp: " << 1714500000 << " Status: " << "READY\n";
+}
+
+// Reading with C++ >> operator and std::getline
+{
+    auto f = vfs->open("log.txt", fs::kFileRead).value();
+    fs::VFSInputStream is(f);
+    std::string line;
+    while (std::getline(is, line)) {
+        std::cout << line << "\n";
+    }
+}
+```
+
+---
+
+## 7. Observer Pattern (IVFSEventListener)
+
+Allows listening to filesystem events (`kFileOpened`, `kFileClosed`, `kFileWritten`, `kFileRemoved`, `kFileRenamed`, `kStorageGrown`).

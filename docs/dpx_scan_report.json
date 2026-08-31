@@ -1,29 +1,32 @@
 {
   "project_path": "/Volumes/External/Code/littlefs_v2",
   "scanned_files_count": 25,
-  "total_detections": 52,
-  "elapsed_seconds": 0.7999,
+  "total_detections": 54,
+  "elapsed_seconds": 0.8203,
   "summary_by_category": {
-    "creational": 0,
-    "structural": 0,
-    "behavioral": 3,
+    "creational": 1,
+    "structural": 1,
+    "behavioral": 4,
     "architectural": 0,
     "concurrency": 0,
-    "principle": 49
+    "principle": 48
   },
   "summary_by_type": {
     "kiss": 36,
     "open_closed": 1,
-    "strategy": 1,
     "single_responsibility": 1,
-    "interface_segregation": 5,
+    "interface_segregation": 4,
     "dependency_inversion": 6,
-    "template_method": 2
+    "strategy": 1,
+    "decorator": 1,
+    "template_method": 2,
+    "observer": 1,
+    "builder": 1
   },
   "summary_by_confidence_level": {
-    "VERY_HIGH": 44,
-    "HIGH": 7,
-    "MEDIUM": 1,
+    "VERY_HIGH": 42,
+    "HIGH": 9,
+    "MEDIUM": 3,
     "LOW": 0
   },
   "detections": [
@@ -1982,7 +1985,7 @@
         "percentage": "87%",
         "evidences": [
           {
-            "description": "Abstract interface 'IBlockDevice' enables open extension through 4 polymorphic implementations: MemoryBlockDevice, FileBlockDevice, CryptoBlockDevice, FaultInjectBlockDevice",
+            "description": "Abstract interface 'IBlockDevice' enables open extension through 3 polymorphic implementations: MemoryBlockDevice, FileBlockDevice, BlockDeviceDecorator",
             "weight": 0.7,
             "rule_code": "OPEN_CLOSED_OCP_POLYMORPHIC_ABSTRACTION",
             "location": {
@@ -2043,20 +2046,12 @@
           "end_line": null,
           "end_column": null,
           "formatted": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1"
-        },
-        {
-          "file_path": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h",
-          "line": 1,
-          "column": 1,
-          "end_line": null,
-          "end_column": null,
-          "formatted": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1"
         }
       ],
-      "summary": "OCP Adherence: Interface 'IBlockDevice' supports open extension with 4 implementations",
+      "summary": "OCP Adherence: Interface 'IBlockDevice' supports open extension with 3 implementations",
       "evidences": [
         {
-          "description": "Abstract interface 'IBlockDevice' enables open extension through 4 polymorphic implementations: MemoryBlockDevice, FileBlockDevice, CryptoBlockDevice, FaultInjectBlockDevice",
+          "description": "Abstract interface 'IBlockDevice' enables open extension through 3 polymorphic implementations: MemoryBlockDevice, FileBlockDevice, BlockDeviceDecorator",
           "weight": 0.7,
           "rule_code": "OPEN_CLOSED_OCP_POLYMORPHIC_ABSTRACTION",
           "location": {
@@ -2073,204 +2068,6 @@
           "description": "New behaviors can be added by implementing the interface without modifying existing consumers",
           "weight": 0.35,
           "rule_code": "OPEN_CLOSED_OCP_EXTENSIBLE_DESIGN",
-          "location": {
-            "file_path": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h",
-            "line": 1,
-            "column": 1,
-            "end_line": null,
-            "end_column": null,
-            "formatted": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1"
-          },
-          "snippet": null
-        }
-      ]
-    },
-    {
-      "pattern_type": "strategy",
-      "pattern_category": "behavioral",
-      "target_name": "IBlockDevice",
-      "target_kind": "protocol_strategy",
-      "confidence": {
-        "score": 0.86,
-        "level": "VERY_HIGH",
-        "percentage": "86%",
-        "evidences": [
-          {
-            "description": "Protocol 'IBlockDevice' defines strategy interface with methods: read, write, erase, sync, get_block_size, get_block_count, set_block_count",
-            "weight": 0.45,
-            "rule_code": "STRATEGY_PROTOCOL_STRATEGY_INTERFACE",
-            "location": {
-              "file_path": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h",
-              "line": 1,
-              "column": 1,
-              "end_line": null,
-              "end_column": null,
-              "formatted": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1"
-            },
-            "snippet": null
-          },
-          {
-            "description": "Record 'MemoryBlockDevice' provides concrete strategy implementation for protocol 'IBlockDevice'",
-            "weight": 0.25,
-            "rule_code": "STRATEGY_RECORD_STRATEGY_IMPL",
-            "location": {
-              "file_path": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h",
-              "line": 1,
-              "column": 1,
-              "end_line": null,
-              "end_column": null,
-              "formatted": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1"
-            },
-            "snippet": null
-          },
-          {
-            "description": "Record 'FileBlockDevice' provides concrete strategy implementation for protocol 'IBlockDevice'",
-            "weight": 0.25,
-            "rule_code": "STRATEGY_RECORD_STRATEGY_IMPL",
-            "location": {
-              "file_path": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h",
-              "line": 1,
-              "column": 1,
-              "end_line": null,
-              "end_column": null,
-              "formatted": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1"
-            },
-            "snippet": null
-          },
-          {
-            "description": "Record 'CryptoBlockDevice' provides concrete strategy implementation for protocol 'IBlockDevice'",
-            "weight": 0.25,
-            "rule_code": "STRATEGY_RECORD_STRATEGY_IMPL",
-            "location": {
-              "file_path": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h",
-              "line": 1,
-              "column": 1,
-              "end_line": null,
-              "end_column": null,
-              "formatted": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1"
-            },
-            "snippet": null
-          },
-          {
-            "description": "Record 'FaultInjectBlockDevice' provides concrete strategy implementation for protocol 'IBlockDevice'",
-            "weight": 0.25,
-            "rule_code": "STRATEGY_RECORD_STRATEGY_IMPL",
-            "location": {
-              "file_path": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h",
-              "line": 1,
-              "column": 1,
-              "end_line": null,
-              "end_column": null,
-              "formatted": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1"
-            },
-            "snippet": null
-          }
-        ]
-      },
-      "primary_location": {
-        "file_path": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h",
-        "line": 1,
-        "column": 1,
-        "end_line": null,
-        "end_column": null,
-        "formatted": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1"
-      },
-      "related_locations": [
-        {
-          "file_path": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h",
-          "line": 1,
-          "column": 1,
-          "end_line": null,
-          "end_column": null,
-          "formatted": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1"
-        },
-        {
-          "file_path": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h",
-          "line": 1,
-          "column": 1,
-          "end_line": null,
-          "end_column": null,
-          "formatted": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1"
-        },
-        {
-          "file_path": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h",
-          "line": 1,
-          "column": 1,
-          "end_line": null,
-          "end_column": null,
-          "formatted": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1"
-        },
-        {
-          "file_path": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h",
-          "line": 1,
-          "column": 1,
-          "end_line": null,
-          "end_column": null,
-          "formatted": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1"
-        }
-      ],
-      "summary": "Strategy pattern: protocol 'IBlockDevice' with 4 interchangeable concrete implementations",
-      "evidences": [
-        {
-          "description": "Protocol 'IBlockDevice' defines strategy interface with methods: read, write, erase, sync, get_block_size, get_block_count, set_block_count",
-          "weight": 0.45,
-          "rule_code": "STRATEGY_PROTOCOL_STRATEGY_INTERFACE",
-          "location": {
-            "file_path": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h",
-            "line": 1,
-            "column": 1,
-            "end_line": null,
-            "end_column": null,
-            "formatted": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1"
-          },
-          "snippet": null
-        },
-        {
-          "description": "Record 'MemoryBlockDevice' provides concrete strategy implementation for protocol 'IBlockDevice'",
-          "weight": 0.25,
-          "rule_code": "STRATEGY_RECORD_STRATEGY_IMPL",
-          "location": {
-            "file_path": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h",
-            "line": 1,
-            "column": 1,
-            "end_line": null,
-            "end_column": null,
-            "formatted": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1"
-          },
-          "snippet": null
-        },
-        {
-          "description": "Record 'FileBlockDevice' provides concrete strategy implementation for protocol 'IBlockDevice'",
-          "weight": 0.25,
-          "rule_code": "STRATEGY_RECORD_STRATEGY_IMPL",
-          "location": {
-            "file_path": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h",
-            "line": 1,
-            "column": 1,
-            "end_line": null,
-            "end_column": null,
-            "formatted": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1"
-          },
-          "snippet": null
-        },
-        {
-          "description": "Record 'CryptoBlockDevice' provides concrete strategy implementation for protocol 'IBlockDevice'",
-          "weight": 0.25,
-          "rule_code": "STRATEGY_RECORD_STRATEGY_IMPL",
-          "location": {
-            "file_path": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h",
-            "line": 1,
-            "column": 1,
-            "end_line": null,
-            "end_column": null,
-            "formatted": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1"
-          },
-          "snippet": null
-        },
-        {
-          "description": "Record 'FaultInjectBlockDevice' provides concrete strategy implementation for protocol 'IBlockDevice'",
-          "weight": 0.25,
-          "rule_code": "STRATEGY_RECORD_STRATEGY_IMPL",
           "location": {
             "file_path": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h",
             "line": 1,
@@ -2445,87 +2242,6 @@
       "evidences": [
         {
           "description": "Interface 'FileBlockDevice' is a Fat Interface defining 14 methods (FileBlockDevice, ~FileBlockDevice, is_open, read, write, erase...), violating ISP",
-          "weight": 0.65,
-          "rule_code": "INTERFACE_SEGREGATION_ISP_FAT_INTERFACE",
-          "location": {
-            "file_path": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h",
-            "line": 1,
-            "column": 1,
-            "end_line": null,
-            "end_column": null,
-            "formatted": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1"
-          },
-          "snippet": null
-        },
-        {
-          "description": "Clients and implementors are forced to depend on methods they may not use",
-          "weight": 0.35,
-          "rule_code": "INTERFACE_SEGREGATION_ISP_UNNEEDED_DEPENDENCY",
-          "location": {
-            "file_path": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h",
-            "line": 1,
-            "column": 1,
-            "end_line": null,
-            "end_column": null,
-            "formatted": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1"
-          },
-          "snippet": null
-        }
-      ]
-    },
-    {
-      "pattern_type": "interface_segregation",
-      "pattern_category": "principle",
-      "target_name": "FaultInjectBlockDevice",
-      "target_kind": "fat_interface_isp_violation",
-      "confidence": {
-        "score": 0.86,
-        "level": "VERY_HIGH",
-        "percentage": "86%",
-        "evidences": [
-          {
-            "description": "Interface 'FaultInjectBlockDevice' is a Fat Interface defining 12 methods (FaultInjectBlockDevice, set_fail_after_writes, set_corrupt_next_write, get_write_count, read, write...), violating ISP",
-            "weight": 0.65,
-            "rule_code": "INTERFACE_SEGREGATION_ISP_FAT_INTERFACE",
-            "location": {
-              "file_path": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h",
-              "line": 1,
-              "column": 1,
-              "end_line": null,
-              "end_column": null,
-              "formatted": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1"
-            },
-            "snippet": null
-          },
-          {
-            "description": "Clients and implementors are forced to depend on methods they may not use",
-            "weight": 0.35,
-            "rule_code": "INTERFACE_SEGREGATION_ISP_UNNEEDED_DEPENDENCY",
-            "location": {
-              "file_path": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h",
-              "line": 1,
-              "column": 1,
-              "end_line": null,
-              "end_column": null,
-              "formatted": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1"
-            },
-            "snippet": null
-          }
-        ]
-      },
-      "primary_location": {
-        "file_path": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h",
-        "line": 1,
-        "column": 1,
-        "end_line": null,
-        "end_column": null,
-        "formatted": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1"
-      },
-      "related_locations": [],
-      "summary": "ISP Violation (Fat Interface): 'FaultInjectBlockDevice' has 12 methods; should be split into smaller role interfaces",
-      "evidences": [
-        {
-          "description": "Interface 'FaultInjectBlockDevice' is a Fat Interface defining 12 methods (FaultInjectBlockDevice, set_fail_after_writes, set_corrupt_next_write, get_write_count, read, write...), violating ISP",
           "weight": 0.65,
           "rule_code": "INTERFACE_SEGREGATION_ISP_FAT_INTERFACE",
           "location": {
@@ -3861,7 +3577,7 @@
         "percentage": "83%",
         "evidences": [
           {
-            "description": "Class 'lfs_disk_offset_t' depends on abstracted interface(s): CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice adhering to DIP",
+            "description": "Class 'lfs_disk_offset_t' depends on abstracted interface(s): CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice, StatisticsBlockDevice adhering to DIP",
             "weight": 0.6,
             "rule_code": "DEPENDENCY_INVERSION_DIP_INJECTED_ABSTRACTION",
             "location": {
@@ -3899,10 +3615,10 @@
         "formatted": "/Volumes/External/Code/littlefs_v2/include/lfs.h:1:1"
       },
       "related_locations": [],
-      "summary": "DIP Adherence: 'lfs_disk_offset_t' depends on interface abstraction(s) (CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice)",
+      "summary": "DIP Adherence: 'lfs_disk_offset_t' depends on interface abstraction(s) (CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice, StatisticsBlockDevice)",
       "evidences": [
         {
-          "description": "Class 'lfs_disk_offset_t' depends on abstracted interface(s): CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice adhering to DIP",
+          "description": "Class 'lfs_disk_offset_t' depends on abstracted interface(s): CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice, StatisticsBlockDevice adhering to DIP",
           "weight": 0.6,
           "rule_code": "DEPENDENCY_INVERSION_DIP_INJECTED_ABSTRACTION",
           "location": {
@@ -3942,7 +3658,7 @@
         "percentage": "83%",
         "evidences": [
           {
-            "description": "Class 'lfs_commit_t' depends on abstracted interface(s): CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice adhering to DIP",
+            "description": "Class 'lfs_commit_t' depends on abstracted interface(s): CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice, StatisticsBlockDevice adhering to DIP",
             "weight": 0.6,
             "rule_code": "DEPENDENCY_INVERSION_DIP_INJECTED_ABSTRACTION",
             "location": {
@@ -3980,10 +3696,10 @@
         "formatted": "/Volumes/External/Code/littlefs_v2/include/lfs.h:1:1"
       },
       "related_locations": [],
-      "summary": "DIP Adherence: 'lfs_commit_t' depends on interface abstraction(s) (CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice)",
+      "summary": "DIP Adherence: 'lfs_commit_t' depends on interface abstraction(s) (CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice, StatisticsBlockDevice)",
       "evidences": [
         {
-          "description": "Class 'lfs_commit_t' depends on abstracted interface(s): CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice adhering to DIP",
+          "description": "Class 'lfs_commit_t' depends on abstracted interface(s): CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice, StatisticsBlockDevice adhering to DIP",
           "weight": 0.6,
           "rule_code": "DEPENDENCY_INVERSION_DIP_INJECTED_ABSTRACTION",
           "location": {
@@ -4023,7 +3739,7 @@
         "percentage": "83%",
         "evidences": [
           {
-            "description": "Class 'lfs_cache_t' depends on abstracted interface(s): CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice adhering to DIP",
+            "description": "Class 'lfs_cache_t' depends on abstracted interface(s): CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice, StatisticsBlockDevice adhering to DIP",
             "weight": 0.6,
             "rule_code": "DEPENDENCY_INVERSION_DIP_INJECTED_ABSTRACTION",
             "location": {
@@ -4061,10 +3777,10 @@
         "formatted": "/Volumes/External/Code/littlefs_v2/include/lfs.h:1:1"
       },
       "related_locations": [],
-      "summary": "DIP Adherence: 'lfs_cache_t' depends on interface abstraction(s) (CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice)",
+      "summary": "DIP Adherence: 'lfs_cache_t' depends on interface abstraction(s) (CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice, StatisticsBlockDevice)",
       "evidences": [
         {
-          "description": "Class 'lfs_cache_t' depends on abstracted interface(s): CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice adhering to DIP",
+          "description": "Class 'lfs_cache_t' depends on abstracted interface(s): CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice, StatisticsBlockDevice adhering to DIP",
           "weight": 0.6,
           "rule_code": "DEPENDENCY_INVERSION_DIP_INJECTED_ABSTRACTION",
           "location": {
@@ -4104,7 +3820,7 @@
         "percentage": "83%",
         "evidences": [
           {
-            "description": "Class 'lfs_file_t' depends on abstracted interface(s): CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice adhering to DIP",
+            "description": "Class 'lfs_file_t' depends on abstracted interface(s): CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice, StatisticsBlockDevice adhering to DIP",
             "weight": 0.6,
             "rule_code": "DEPENDENCY_INVERSION_DIP_INJECTED_ABSTRACTION",
             "location": {
@@ -4142,10 +3858,10 @@
         "formatted": "/Volumes/External/Code/littlefs_v2/include/lfs.h:1:1"
       },
       "related_locations": [],
-      "summary": "DIP Adherence: 'lfs_file_t' depends on interface abstraction(s) (CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice)",
+      "summary": "DIP Adherence: 'lfs_file_t' depends on interface abstraction(s) (CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice, StatisticsBlockDevice)",
       "evidences": [
         {
-          "description": "Class 'lfs_file_t' depends on abstracted interface(s): CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice adhering to DIP",
+          "description": "Class 'lfs_file_t' depends on abstracted interface(s): CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice, StatisticsBlockDevice adhering to DIP",
           "weight": 0.6,
           "rule_code": "DEPENDENCY_INVERSION_DIP_INJECTED_ABSTRACTION",
           "location": {
@@ -4185,7 +3901,7 @@
         "percentage": "83%",
         "evidences": [
           {
-            "description": "Class 'lfs_free_t' depends on abstracted interface(s): CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice, IFileObject, IFileSystemDevice, VFSFileObject adhering to DIP",
+            "description": "Class 'lfs_free_t' depends on abstracted interface(s): CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice, IFileObject, IFileSystemDevice, IVFSEventListener, StatisticsBlockDevice, VFSBuilder, VFSFileObject adhering to DIP",
             "weight": 0.6,
             "rule_code": "DEPENDENCY_INVERSION_DIP_INJECTED_ABSTRACTION",
             "location": {
@@ -4223,10 +3939,10 @@
         "formatted": "/Volumes/External/Code/littlefs_v2/include/lfs.h:1:1"
       },
       "related_locations": [],
-      "summary": "DIP Adherence: 'lfs_free_t' depends on interface abstraction(s) (CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice, IFileObject, IFileSystemDevice, VFSFileObject)",
+      "summary": "DIP Adherence: 'lfs_free_t' depends on interface abstraction(s) (CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice, IFileObject, IFileSystemDevice, IVFSEventListener, StatisticsBlockDevice, VFSBuilder, VFSFileObject)",
       "evidences": [
         {
-          "description": "Class 'lfs_free_t' depends on abstracted interface(s): CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice, IFileObject, IFileSystemDevice, VFSFileObject adhering to DIP",
+          "description": "Class 'lfs_free_t' depends on abstracted interface(s): CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice, IFileObject, IFileSystemDevice, IVFSEventListener, StatisticsBlockDevice, VFSBuilder, VFSFileObject adhering to DIP",
           "weight": 0.6,
           "rule_code": "DEPENDENCY_INVERSION_DIP_INJECTED_ABSTRACTION",
           "location": {
@@ -4250,6 +3966,258 @@
             "end_line": null,
             "end_column": null,
             "formatted": "/Volumes/External/Code/littlefs_v2/include/lfs.h:1:1"
+          },
+          "snippet": null
+        }
+      ]
+    },
+    {
+      "pattern_type": "strategy",
+      "pattern_category": "behavioral",
+      "target_name": "IBlockDevice",
+      "target_kind": "protocol_strategy",
+      "confidence": {
+        "score": 0.81,
+        "level": "HIGH",
+        "percentage": "81%",
+        "evidences": [
+          {
+            "description": "Protocol 'IBlockDevice' defines strategy interface with methods: read, write, erase, sync, get_block_size, get_block_count, set_block_count",
+            "weight": 0.45,
+            "rule_code": "STRATEGY_PROTOCOL_STRATEGY_INTERFACE",
+            "location": {
+              "file_path": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h",
+              "line": 1,
+              "column": 1,
+              "end_line": null,
+              "end_column": null,
+              "formatted": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1"
+            },
+            "snippet": null
+          },
+          {
+            "description": "Record 'MemoryBlockDevice' provides concrete strategy implementation for protocol 'IBlockDevice'",
+            "weight": 0.25,
+            "rule_code": "STRATEGY_RECORD_STRATEGY_IMPL",
+            "location": {
+              "file_path": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h",
+              "line": 1,
+              "column": 1,
+              "end_line": null,
+              "end_column": null,
+              "formatted": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1"
+            },
+            "snippet": null
+          },
+          {
+            "description": "Record 'FileBlockDevice' provides concrete strategy implementation for protocol 'IBlockDevice'",
+            "weight": 0.25,
+            "rule_code": "STRATEGY_RECORD_STRATEGY_IMPL",
+            "location": {
+              "file_path": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h",
+              "line": 1,
+              "column": 1,
+              "end_line": null,
+              "end_column": null,
+              "formatted": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1"
+            },
+            "snippet": null
+          },
+          {
+            "description": "Record 'BlockDeviceDecorator' provides concrete strategy implementation for protocol 'IBlockDevice'",
+            "weight": 0.25,
+            "rule_code": "STRATEGY_RECORD_STRATEGY_IMPL",
+            "location": {
+              "file_path": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h",
+              "line": 1,
+              "column": 1,
+              "end_line": null,
+              "end_column": null,
+              "formatted": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1"
+            },
+            "snippet": null
+          }
+        ]
+      },
+      "primary_location": {
+        "file_path": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h",
+        "line": 1,
+        "column": 1,
+        "end_line": null,
+        "end_column": null,
+        "formatted": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1"
+      },
+      "related_locations": [
+        {
+          "file_path": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h",
+          "line": 1,
+          "column": 1,
+          "end_line": null,
+          "end_column": null,
+          "formatted": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1"
+        },
+        {
+          "file_path": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h",
+          "line": 1,
+          "column": 1,
+          "end_line": null,
+          "end_column": null,
+          "formatted": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1"
+        },
+        {
+          "file_path": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h",
+          "line": 1,
+          "column": 1,
+          "end_line": null,
+          "end_column": null,
+          "formatted": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1"
+        }
+      ],
+      "summary": "Strategy pattern: protocol 'IBlockDevice' with 3 interchangeable concrete implementations",
+      "evidences": [
+        {
+          "description": "Protocol 'IBlockDevice' defines strategy interface with methods: read, write, erase, sync, get_block_size, get_block_count, set_block_count",
+          "weight": 0.45,
+          "rule_code": "STRATEGY_PROTOCOL_STRATEGY_INTERFACE",
+          "location": {
+            "file_path": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h",
+            "line": 1,
+            "column": 1,
+            "end_line": null,
+            "end_column": null,
+            "formatted": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1"
+          },
+          "snippet": null
+        },
+        {
+          "description": "Record 'MemoryBlockDevice' provides concrete strategy implementation for protocol 'IBlockDevice'",
+          "weight": 0.25,
+          "rule_code": "STRATEGY_RECORD_STRATEGY_IMPL",
+          "location": {
+            "file_path": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h",
+            "line": 1,
+            "column": 1,
+            "end_line": null,
+            "end_column": null,
+            "formatted": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1"
+          },
+          "snippet": null
+        },
+        {
+          "description": "Record 'FileBlockDevice' provides concrete strategy implementation for protocol 'IBlockDevice'",
+          "weight": 0.25,
+          "rule_code": "STRATEGY_RECORD_STRATEGY_IMPL",
+          "location": {
+            "file_path": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h",
+            "line": 1,
+            "column": 1,
+            "end_line": null,
+            "end_column": null,
+            "formatted": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1"
+          },
+          "snippet": null
+        },
+        {
+          "description": "Record 'BlockDeviceDecorator' provides concrete strategy implementation for protocol 'IBlockDevice'",
+          "weight": 0.25,
+          "rule_code": "STRATEGY_RECORD_STRATEGY_IMPL",
+          "location": {
+            "file_path": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h",
+            "line": 1,
+            "column": 1,
+            "end_line": null,
+            "end_column": null,
+            "formatted": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1"
+          },
+          "snippet": null
+        }
+      ]
+    },
+    {
+      "pattern_type": "decorator",
+      "pattern_category": "structural",
+      "target_name": "BlockDeviceDecorator",
+      "target_kind": "cpp_decorator_class",
+      "confidence": {
+        "score": 0.81,
+        "level": "HIGH",
+        "percentage": "81%",
+        "evidences": [
+          {
+            "description": "Class 'BlockDeviceDecorator' follows Decorator pattern naming convention",
+            "weight": 0.5,
+            "rule_code": "DECORATOR_DECORATOR_NAMING",
+            "location": {
+              "file_path": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h",
+              "line": 1,
+              "column": 1,
+              "end_line": null,
+              "end_column": null,
+              "formatted": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1"
+            },
+            "snippet": null
+          },
+          {
+            "description": "Implements decorated component interface(s): IBlockDevice",
+            "weight": 0.45,
+            "rule_code": "DECORATOR_DECORATOR_IMPLEMENTS_COMPONENT",
+            "location": {
+              "file_path": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h",
+              "line": 1,
+              "column": 1,
+              "end_line": null,
+              "end_column": null,
+              "formatted": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1"
+            },
+            "snippet": null
+          }
+        ]
+      },
+      "primary_location": {
+        "file_path": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h",
+        "line": 1,
+        "column": 1,
+        "end_line": null,
+        "end_column": null,
+        "formatted": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1"
+      },
+      "related_locations": [
+        {
+          "file_path": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h",
+          "line": 1,
+          "column": 1,
+          "end_line": null,
+          "end_column": null,
+          "formatted": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1"
+        }
+      ],
+      "summary": "Decorator pattern: class 'BlockDeviceDecorator' dynamically augments component behavior via wrapping",
+      "evidences": [
+        {
+          "description": "Class 'BlockDeviceDecorator' follows Decorator pattern naming convention",
+          "weight": 0.5,
+          "rule_code": "DECORATOR_DECORATOR_NAMING",
+          "location": {
+            "file_path": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h",
+            "line": 1,
+            "column": 1,
+            "end_line": null,
+            "end_column": null,
+            "formatted": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1"
+          },
+          "snippet": null
+        },
+        {
+          "description": "Implements decorated component interface(s): IBlockDevice",
+          "weight": 0.45,
+          "rule_code": "DECORATOR_DECORATOR_IMPLEMENTS_COMPONENT",
+          "location": {
+            "file_path": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h",
+            "line": 1,
+            "column": 1,
+            "end_line": null,
+            "end_column": null,
+            "formatted": "/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1"
           },
           "snippet": null
         }
@@ -4346,6 +4314,59 @@
       ]
     },
     {
+      "pattern_type": "observer",
+      "pattern_category": "behavioral",
+      "target_name": "IVFSEventListener",
+      "target_kind": "observer_protocol",
+      "confidence": {
+        "score": 0.69,
+        "level": "MEDIUM",
+        "percentage": "69%",
+        "evidences": [
+          {
+            "description": "Protocol 'IVFSEventListener' defines Observer interface with callback methods: onVFSEvent",
+            "weight": 0.55,
+            "rule_code": "OBSERVER_OBSERVER_INTERFACE",
+            "location": {
+              "file_path": "/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.h",
+              "line": 1,
+              "column": 1,
+              "end_line": null,
+              "end_column": null,
+              "formatted": "/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.h:1:1"
+            },
+            "snippet": null
+          }
+        ]
+      },
+      "primary_location": {
+        "file_path": "/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.h",
+        "line": 1,
+        "column": 1,
+        "end_line": null,
+        "end_column": null,
+        "formatted": "/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.h:1:1"
+      },
+      "related_locations": [],
+      "summary": "Observer pattern: observer interface 'IVFSEventListener' implemented by 0 observer records",
+      "evidences": [
+        {
+          "description": "Protocol 'IVFSEventListener' defines Observer interface with callback methods: onVFSEvent",
+          "weight": 0.55,
+          "rule_code": "OBSERVER_OBSERVER_INTERFACE",
+          "location": {
+            "file_path": "/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.h",
+            "line": 1,
+            "column": 1,
+            "end_line": null,
+            "end_column": null,
+            "formatted": "/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.h:1:1"
+          },
+          "snippet": null
+        }
+      ]
+    },
+    {
       "pattern_type": "template_method",
       "pattern_category": "behavioral",
       "target_name": "VFSFileObject",
@@ -4393,6 +4414,59 @@
             "end_line": null,
             "end_column": null,
             "formatted": "/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.cpp:1:1"
+          },
+          "snippet": null
+        }
+      ]
+    },
+    {
+      "pattern_type": "builder",
+      "pattern_category": "creational",
+      "target_name": "VFSBuilder",
+      "target_kind": "builder_protocol",
+      "confidence": {
+        "score": 0.69,
+        "level": "MEDIUM",
+        "percentage": "69%",
+        "evidences": [
+          {
+            "description": "Protocol 'VFSBuilder' defines builder construction interface with methods: withCrypto",
+            "weight": 0.55,
+            "rule_code": "BUILDER_BUILDER_PROTOCOL",
+            "location": {
+              "file_path": "/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.h",
+              "line": 1,
+              "column": 1,
+              "end_line": null,
+              "end_column": null,
+              "formatted": "/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.h:1:1"
+            },
+            "snippet": null
+          }
+        ]
+      },
+      "primary_location": {
+        "file_path": "/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.h",
+        "line": 1,
+        "column": 1,
+        "end_line": null,
+        "end_column": null,
+        "formatted": "/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.h:1:1"
+      },
+      "related_locations": [],
+      "summary": "Builder pattern: protocol 'VFSBuilder' defines construction steps implemented by 0 concrete builders",
+      "evidences": [
+        {
+          "description": "Protocol 'VFSBuilder' defines builder construction interface with methods: withCrypto",
+          "weight": 0.55,
+          "rule_code": "BUILDER_BUILDER_PROTOCOL",
+          "location": {
+            "file_path": "/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.h",
+            "line": 1,
+            "column": 1,
+            "end_line": null,
+            "end_column": null,
+            "formatted": "/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.h:1:1"
           },
           "snippet": null
         }

@@ -2,8 +2,8 @@
 
 > **Project:** `/Volumes/External/Code/littlefs_v2`  
 > **Scanned Files:** 25  
-> **Total Detections:** 52  
-> **Duration:** 0.800s  
+> **Total Detections:** 54  
+> **Duration:** 0.820s  
 
 ---
 
@@ -11,8 +11,10 @@
 
 | Category | Detections Count |
 | :--- | :---: |
-| **BEHAVIORAL** | 3 |
-| **PRINCIPLE** | 49 |
+| **CREATIONAL** | 1 |
+| **STRUCTURAL** | 1 |
+| **BEHAVIORAL** | 4 |
+| **PRINCIPLE** | 48 |
 
 ---
 
@@ -285,41 +287,20 @@
 ### #25 OPEN_CLOSED on ocp_polymorphic_hierarchy `IBlockDevice`
 - **Confidence:** 87% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1`](/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h)
-- **Summary:** OCP Adherence: Interface 'IBlockDevice' supports open extension with 4 implementations
+- **Summary:** OCP Adherence: Interface 'IBlockDevice' supports open extension with 3 implementations
 
 #### 🔎 Evidence Trail:
-- **+70%** `[OPEN_CLOSED_OCP_POLYMORPHIC_ABSTRACTION]` Abstract interface 'IBlockDevice' enables open extension through 4 polymorphic implementations: MemoryBlockDevice, FileBlockDevice, CryptoBlockDevice, FaultInjectBlockDevice _(at `/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1`)_
+- **+70%** `[OPEN_CLOSED_OCP_POLYMORPHIC_ABSTRACTION]` Abstract interface 'IBlockDevice' enables open extension through 3 polymorphic implementations: MemoryBlockDevice, FileBlockDevice, BlockDeviceDecorator _(at `/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1`)_
 - **+35%** `[OPEN_CLOSED_OCP_EXTENSIBLE_DESIGN]` New behaviors can be added by implementing the interface without modifying existing consumers _(at `/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1`)_
 
 **Related Locations:**
 - [`/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1`](/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h)
 - [`/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1`](/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h)
 - [`/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1`](/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h)
-- [`/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1`](/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h)
 
 ---
 
-### #26 STRATEGY on protocol_strategy `IBlockDevice`
-- **Confidence:** 86% (🟢 `VERY_HIGH`)
-- **Primary Location:** [`/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1`](/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h)
-- **Summary:** Strategy pattern: protocol 'IBlockDevice' with 4 interchangeable concrete implementations
-
-#### 🔎 Evidence Trail:
-- **+45%** `[STRATEGY_PROTOCOL_STRATEGY_INTERFACE]` Protocol 'IBlockDevice' defines strategy interface with methods: read, write, erase, sync, get_block_size, get_block_count, set_block_count _(at `/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1`)_
-- **+25%** `[STRATEGY_RECORD_STRATEGY_IMPL]` Record 'MemoryBlockDevice' provides concrete strategy implementation for protocol 'IBlockDevice' _(at `/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1`)_
-- **+25%** `[STRATEGY_RECORD_STRATEGY_IMPL]` Record 'FileBlockDevice' provides concrete strategy implementation for protocol 'IBlockDevice' _(at `/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1`)_
-- **+25%** `[STRATEGY_RECORD_STRATEGY_IMPL]` Record 'CryptoBlockDevice' provides concrete strategy implementation for protocol 'IBlockDevice' _(at `/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1`)_
-- **+25%** `[STRATEGY_RECORD_STRATEGY_IMPL]` Record 'FaultInjectBlockDevice' provides concrete strategy implementation for protocol 'IBlockDevice' _(at `/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1`)_
-
-**Related Locations:**
-- [`/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1`](/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h)
-- [`/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1`](/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h)
-- [`/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1`](/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h)
-- [`/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1`](/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h)
-
----
-
-### #27 SINGLE_RESPONSIBILITY on god_class_srp_violation `lfsVFS`
+### #26 SINGLE_RESPONSIBILITY on god_class_srp_violation `lfsVFS`
 - **Confidence:** 86% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.h:1:1`](/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.h)
 - **Summary:** SRP Violation (God Class): 'lfsVFS' mixes 2 concerns across 13 methods
@@ -331,7 +312,7 @@
 
 ---
 
-### #28 INTERFACE_SEGREGATION on fat_interface_isp_violation `FileBlockDevice`
+### #27 INTERFACE_SEGREGATION on fat_interface_isp_violation `FileBlockDevice`
 - **Confidence:** 86% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1`](/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h)
 - **Summary:** ISP Violation (Fat Interface): 'FileBlockDevice' has 14 methods; should be split into smaller role interfaces
@@ -342,18 +323,7 @@
 
 ---
 
-### #29 INTERFACE_SEGREGATION on fat_interface_isp_violation `FaultInjectBlockDevice`
-- **Confidence:** 86% (🟢 `VERY_HIGH`)
-- **Primary Location:** [`/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1`](/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h)
-- **Summary:** ISP Violation (Fat Interface): 'FaultInjectBlockDevice' has 12 methods; should be split into smaller role interfaces
-
-#### 🔎 Evidence Trail:
-- **+65%** `[INTERFACE_SEGREGATION_ISP_FAT_INTERFACE]` Interface 'FaultInjectBlockDevice' is a Fat Interface defining 12 methods (FaultInjectBlockDevice, set_fail_after_writes, set_corrupt_next_write, get_write_count, read, write...), violating ISP _(at `/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1`)_
-- **+35%** `[INTERFACE_SEGREGATION_ISP_UNNEEDED_DEPENDENCY]` Clients and implementors are forced to depend on methods they may not use _(at `/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1`)_
-
----
-
-### #30 INTERFACE_SEGREGATION on fat_interface_isp_violation `VFSFileObject`
+### #28 INTERFACE_SEGREGATION on fat_interface_isp_violation `VFSFileObject`
 - **Confidence:** 86% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.cpp)
 - **Summary:** ISP Violation (Fat Interface): 'VFSFileObject' has 13 methods; should be split into smaller role interfaces
@@ -364,7 +334,7 @@
 
 ---
 
-### #31 INTERFACE_SEGREGATION on fat_interface_isp_violation `IFileObject`
+### #29 INTERFACE_SEGREGATION on fat_interface_isp_violation `IFileObject`
 - **Confidence:** 86% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.h:1:1`](/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.h)
 - **Summary:** ISP Violation (Fat Interface): 'IFileObject' has 8 methods; should be split into smaller role interfaces
@@ -375,7 +345,7 @@
 
 ---
 
-### #32 INTERFACE_SEGREGATION on fat_interface_isp_violation `IFileSystemDevice`
+### #30 INTERFACE_SEGREGATION on fat_interface_isp_violation `IFileSystemDevice`
 - **Confidence:** 86% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.h:1:1`](/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.h)
 - **Summary:** ISP Violation (Fat Interface): 'IFileSystemDevice' has 10 methods; should be split into smaller role interfaces
@@ -386,7 +356,7 @@
 
 ---
 
-### #33 KISS on kiss_complexity_parameters `lfs_fuse_readdir`
+### #31 KISS on kiss_complexity_parameters `lfs_fuse_readdir`
 - **Confidence:** 85% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/example/lfs_fuse.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/example/lfs_fuse.cpp)
 - **Summary:** KISS Violation (Long Parameter List): Method 'lfs_fuse_readdir' takes 6 parameters
@@ -397,7 +367,7 @@
 
 ---
 
-### #34 KISS on kiss_complexity_parameters `lfs_dir_getslice`
+### #32 KISS on kiss_complexity_parameters `lfs_dir_getslice`
 - **Confidence:** 85% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_metadata.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_metadata.cpp)
 - **Summary:** KISS Violation (Long Parameter List): Method 'lfs_dir_getslice' takes 7 parameters
@@ -408,7 +378,7 @@
 
 ---
 
-### #35 KISS on kiss_complexity_parameters `lfs_dir_getread`
+### #33 KISS on kiss_complexity_parameters `lfs_dir_getread`
 - **Confidence:** 85% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_metadata.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_metadata.cpp)
 - **Summary:** KISS Violation (Long Parameter List): Method 'lfs_dir_getread' takes 10 parameters
@@ -419,7 +389,7 @@
 
 ---
 
-### #36 KISS on kiss_complexity_parameters `lfs_dir_split`
+### #34 KISS on kiss_complexity_parameters `lfs_dir_split`
 - **Confidence:** 85% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_commit.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_commit.cpp)
 - **Summary:** KISS Violation (Long Parameter List): Method 'lfs_dir_split' takes 7 parameters
@@ -430,7 +400,7 @@
 
 ---
 
-### #37 KISS on kiss_complexity_parameters `lfs_dir_compact`
+### #35 KISS on kiss_complexity_parameters `lfs_dir_compact`
 - **Confidence:** 85% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_commit.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_commit.cpp)
 - **Summary:** KISS Violation (Long Parameter List): Method 'lfs_dir_compact' takes 7 parameters
@@ -441,7 +411,7 @@
 
 ---
 
-### #38 KISS on kiss_complexity_parameters `lfs_dir_splittingcompact`
+### #36 KISS on kiss_complexity_parameters `lfs_dir_splittingcompact`
 - **Confidence:** 85% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_commit.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_commit.cpp)
 - **Summary:** KISS Violation (Long Parameter List): Method 'lfs_dir_splittingcompact' takes 7 parameters
@@ -452,7 +422,7 @@
 
 ---
 
-### #39 KISS on kiss_complexity_parameters `lfs_dir_relocating_commit`
+### #37 KISS on kiss_complexity_parameters `lfs_dir_relocating_commit`
 - **Confidence:** 85% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_commit.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_commit.cpp)
 - **Summary:** KISS Violation (Long Parameter List): Method 'lfs_dir_relocating_commit' takes 6 parameters
@@ -463,7 +433,7 @@
 
 ---
 
-### #40 KISS on kiss_complexity_parameters `lfs_bd_read`
+### #38 KISS on kiss_complexity_parameters `lfs_bd_read`
 - **Confidence:** 85% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_device.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_device.cpp)
 - **Summary:** KISS Violation (Long Parameter List): Method 'lfs_bd_read' takes 8 parameters
@@ -474,7 +444,7 @@
 
 ---
 
-### #41 KISS on kiss_complexity_parameters `lfs_bd_cmp`
+### #39 KISS on kiss_complexity_parameters `lfs_bd_cmp`
 - **Confidence:** 85% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_device.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_device.cpp)
 - **Summary:** KISS Violation (Long Parameter List): Method 'lfs_bd_cmp' takes 8 parameters
@@ -485,7 +455,7 @@
 
 ---
 
-### #42 KISS on kiss_complexity_parameters `lfs_bd_write`
+### #40 KISS on kiss_complexity_parameters `lfs_bd_write`
 - **Confidence:** 85% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_device.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_device.cpp)
 - **Summary:** KISS Violation (Long Parameter List): Method 'lfs_bd_write' takes 8 parameters
@@ -496,7 +466,7 @@
 
 ---
 
-### #43 KISS on kiss_complexity_parameters `lfs_ctz_find`
+### #41 KISS on kiss_complexity_parameters `lfs_ctz_find`
 - **Confidence:** 85% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_file_index.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_file_index.cpp)
 - **Summary:** KISS Violation (Long Parameter List): Method 'lfs_ctz_find' takes 8 parameters
@@ -507,7 +477,7 @@
 
 ---
 
-### #44 KISS on kiss_complexity_parameters `lfs_ctz_extend`
+### #42 KISS on kiss_complexity_parameters `lfs_ctz_extend`
 - **Confidence:** 85% (🟢 `VERY_HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_file_index.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/littlefs_v2/lfs_file_index.cpp)
 - **Summary:** KISS Violation (Long Parameter List): Method 'lfs_ctz_extend' takes 7 parameters
@@ -518,7 +488,7 @@
 
 ---
 
-### #45 DEPENDENCY_INVERSION on dip_interface_dependency `VFSFileObject`
+### #43 DEPENDENCY_INVERSION on dip_interface_dependency `VFSFileObject`
 - **Confidence:** 83% (🔵 `HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.cpp)
 - **Summary:** DIP Adherence: 'VFSFileObject' depends on interface abstraction(s) (ErrorCode)
@@ -529,58 +499,90 @@
 
 ---
 
-### #46 DEPENDENCY_INVERSION on dip_interface_dependency `lfs_disk_offset_t`
+### #44 DEPENDENCY_INVERSION on dip_interface_dependency `lfs_disk_offset_t`
 - **Confidence:** 83% (🔵 `HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/include/lfs.h:1:1`](/Volumes/External/Code/littlefs_v2/include/lfs.h)
-- **Summary:** DIP Adherence: 'lfs_disk_offset_t' depends on interface abstraction(s) (CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice)
+- **Summary:** DIP Adherence: 'lfs_disk_offset_t' depends on interface abstraction(s) (CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice, StatisticsBlockDevice)
 
 #### 🔎 Evidence Trail:
-- **+60%** `[DEPENDENCY_INVERSION_DIP_INJECTED_ABSTRACTION]` Class 'lfs_disk_offset_t' depends on abstracted interface(s): CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice adhering to DIP _(at `/Volumes/External/Code/littlefs_v2/include/lfs.h:1:1`)_
+- **+60%** `[DEPENDENCY_INVERSION_DIP_INJECTED_ABSTRACTION]` Class 'lfs_disk_offset_t' depends on abstracted interface(s): CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice, StatisticsBlockDevice adhering to DIP _(at `/Volumes/External/Code/littlefs_v2/include/lfs.h:1:1`)_
 - **+35%** `[DEPENDENCY_INVERSION_DIP_DECOUPLED_ARCHITECTURE]` Core domain logic is decoupled from infrastructure details via Dependency Injection _(at `/Volumes/External/Code/littlefs_v2/include/lfs.h:1:1`)_
 
 ---
 
-### #47 DEPENDENCY_INVERSION on dip_interface_dependency `lfs_commit_t`
+### #45 DEPENDENCY_INVERSION on dip_interface_dependency `lfs_commit_t`
 - **Confidence:** 83% (🔵 `HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/include/lfs.h:1:1`](/Volumes/External/Code/littlefs_v2/include/lfs.h)
-- **Summary:** DIP Adherence: 'lfs_commit_t' depends on interface abstraction(s) (CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice)
+- **Summary:** DIP Adherence: 'lfs_commit_t' depends on interface abstraction(s) (CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice, StatisticsBlockDevice)
 
 #### 🔎 Evidence Trail:
-- **+60%** `[DEPENDENCY_INVERSION_DIP_INJECTED_ABSTRACTION]` Class 'lfs_commit_t' depends on abstracted interface(s): CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice adhering to DIP _(at `/Volumes/External/Code/littlefs_v2/include/lfs.h:1:1`)_
+- **+60%** `[DEPENDENCY_INVERSION_DIP_INJECTED_ABSTRACTION]` Class 'lfs_commit_t' depends on abstracted interface(s): CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice, StatisticsBlockDevice adhering to DIP _(at `/Volumes/External/Code/littlefs_v2/include/lfs.h:1:1`)_
 - **+35%** `[DEPENDENCY_INVERSION_DIP_DECOUPLED_ARCHITECTURE]` Core domain logic is decoupled from infrastructure details via Dependency Injection _(at `/Volumes/External/Code/littlefs_v2/include/lfs.h:1:1`)_
 
 ---
 
-### #48 DEPENDENCY_INVERSION on dip_interface_dependency `lfs_cache_t`
+### #46 DEPENDENCY_INVERSION on dip_interface_dependency `lfs_cache_t`
 - **Confidence:** 83% (🔵 `HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/include/lfs.h:1:1`](/Volumes/External/Code/littlefs_v2/include/lfs.h)
-- **Summary:** DIP Adherence: 'lfs_cache_t' depends on interface abstraction(s) (CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice)
+- **Summary:** DIP Adherence: 'lfs_cache_t' depends on interface abstraction(s) (CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice, StatisticsBlockDevice)
 
 #### 🔎 Evidence Trail:
-- **+60%** `[DEPENDENCY_INVERSION_DIP_INJECTED_ABSTRACTION]` Class 'lfs_cache_t' depends on abstracted interface(s): CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice adhering to DIP _(at `/Volumes/External/Code/littlefs_v2/include/lfs.h:1:1`)_
+- **+60%** `[DEPENDENCY_INVERSION_DIP_INJECTED_ABSTRACTION]` Class 'lfs_cache_t' depends on abstracted interface(s): CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice, StatisticsBlockDevice adhering to DIP _(at `/Volumes/External/Code/littlefs_v2/include/lfs.h:1:1`)_
 - **+35%** `[DEPENDENCY_INVERSION_DIP_DECOUPLED_ARCHITECTURE]` Core domain logic is decoupled from infrastructure details via Dependency Injection _(at `/Volumes/External/Code/littlefs_v2/include/lfs.h:1:1`)_
 
 ---
 
-### #49 DEPENDENCY_INVERSION on dip_interface_dependency `lfs_file_t`
+### #47 DEPENDENCY_INVERSION on dip_interface_dependency `lfs_file_t`
 - **Confidence:** 83% (🔵 `HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/include/lfs.h:1:1`](/Volumes/External/Code/littlefs_v2/include/lfs.h)
-- **Summary:** DIP Adherence: 'lfs_file_t' depends on interface abstraction(s) (CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice)
+- **Summary:** DIP Adherence: 'lfs_file_t' depends on interface abstraction(s) (CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice, StatisticsBlockDevice)
 
 #### 🔎 Evidence Trail:
-- **+60%** `[DEPENDENCY_INVERSION_DIP_INJECTED_ABSTRACTION]` Class 'lfs_file_t' depends on abstracted interface(s): CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice adhering to DIP _(at `/Volumes/External/Code/littlefs_v2/include/lfs.h:1:1`)_
+- **+60%** `[DEPENDENCY_INVERSION_DIP_INJECTED_ABSTRACTION]` Class 'lfs_file_t' depends on abstracted interface(s): CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice, StatisticsBlockDevice adhering to DIP _(at `/Volumes/External/Code/littlefs_v2/include/lfs.h:1:1`)_
 - **+35%** `[DEPENDENCY_INVERSION_DIP_DECOUPLED_ARCHITECTURE]` Core domain logic is decoupled from infrastructure details via Dependency Injection _(at `/Volumes/External/Code/littlefs_v2/include/lfs.h:1:1`)_
 
 ---
 
-### #50 DEPENDENCY_INVERSION on dip_interface_dependency `lfs_free_t`
+### #48 DEPENDENCY_INVERSION on dip_interface_dependency `lfs_free_t`
 - **Confidence:** 83% (🔵 `HIGH`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/include/lfs.h:1:1`](/Volumes/External/Code/littlefs_v2/include/lfs.h)
-- **Summary:** DIP Adherence: 'lfs_free_t' depends on interface abstraction(s) (CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice, IFileObject, IFileSystemDevice, VFSFileObject)
+- **Summary:** DIP Adherence: 'lfs_free_t' depends on interface abstraction(s) (CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice, IFileObject, IFileSystemDevice, IVFSEventListener, StatisticsBlockDevice, VFSBuilder, VFSFileObject)
 
 #### 🔎 Evidence Trail:
-- **+60%** `[DEPENDENCY_INVERSION_DIP_INJECTED_ABSTRACTION]` Class 'lfs_free_t' depends on abstracted interface(s): CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice, IFileObject, IFileSystemDevice, VFSFileObject adhering to DIP _(at `/Volumes/External/Code/littlefs_v2/include/lfs.h:1:1`)_
+- **+60%** `[DEPENDENCY_INVERSION_DIP_INJECTED_ABSTRACTION]` Class 'lfs_free_t' depends on abstracted interface(s): CryptoBlockDevice, FaultInjectBlockDevice, FileBlockDevice, IBlockDevice, IFileObject, IFileSystemDevice, IVFSEventListener, StatisticsBlockDevice, VFSBuilder, VFSFileObject adhering to DIP _(at `/Volumes/External/Code/littlefs_v2/include/lfs.h:1:1`)_
 - **+35%** `[DEPENDENCY_INVERSION_DIP_DECOUPLED_ARCHITECTURE]` Core domain logic is decoupled from infrastructure details via Dependency Injection _(at `/Volumes/External/Code/littlefs_v2/include/lfs.h:1:1`)_
+
+---
+
+### #49 STRATEGY on protocol_strategy `IBlockDevice`
+- **Confidence:** 81% (🔵 `HIGH`)
+- **Primary Location:** [`/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1`](/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h)
+- **Summary:** Strategy pattern: protocol 'IBlockDevice' with 3 interchangeable concrete implementations
+
+#### 🔎 Evidence Trail:
+- **+45%** `[STRATEGY_PROTOCOL_STRATEGY_INTERFACE]` Protocol 'IBlockDevice' defines strategy interface with methods: read, write, erase, sync, get_block_size, get_block_count, set_block_count _(at `/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1`)_
+- **+25%** `[STRATEGY_RECORD_STRATEGY_IMPL]` Record 'MemoryBlockDevice' provides concrete strategy implementation for protocol 'IBlockDevice' _(at `/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1`)_
+- **+25%** `[STRATEGY_RECORD_STRATEGY_IMPL]` Record 'FileBlockDevice' provides concrete strategy implementation for protocol 'IBlockDevice' _(at `/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1`)_
+- **+25%** `[STRATEGY_RECORD_STRATEGY_IMPL]` Record 'BlockDeviceDecorator' provides concrete strategy implementation for protocol 'IBlockDevice' _(at `/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1`)_
+
+**Related Locations:**
+- [`/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1`](/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h)
+- [`/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1`](/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h)
+- [`/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1`](/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h)
+
+---
+
+### #50 DECORATOR on cpp_decorator_class `BlockDeviceDecorator`
+- **Confidence:** 81% (🔵 `HIGH`)
+- **Primary Location:** [`/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1`](/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h)
+- **Summary:** Decorator pattern: class 'BlockDeviceDecorator' dynamically augments component behavior via wrapping
+
+#### 🔎 Evidence Trail:
+- **+50%** `[DECORATOR_DECORATOR_NAMING]` Class 'BlockDeviceDecorator' follows Decorator pattern naming convention _(at `/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1`)_
+- **+45%** `[DECORATOR_DECORATOR_IMPLEMENTS_COMPONENT]` Implements decorated component interface(s): IBlockDevice _(at `/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1`)_
+
+**Related Locations:**
+- [`/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h:1:1`](/Volumes/External/Code/littlefs_v2/include/lfs_block_device.h)
 
 ---
 
@@ -598,12 +600,32 @@
 
 ---
 
-### #52 TEMPLATE_METHOD on template_method_protocol `VFSFileObject`
+### #52 OBSERVER on observer_protocol `IVFSEventListener`
+- **Confidence:** 69% (🟡 `MEDIUM`)
+- **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.h:1:1`](/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.h)
+- **Summary:** Observer pattern: observer interface 'IVFSEventListener' implemented by 0 observer records
+
+#### 🔎 Evidence Trail:
+- **+55%** `[OBSERVER_OBSERVER_INTERFACE]` Protocol 'IVFSEventListener' defines Observer interface with callback methods: onVFSEvent _(at `/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.h:1:1`)_
+
+---
+
+### #53 TEMPLATE_METHOD on template_method_protocol `VFSFileObject`
 - **Confidence:** 69% (🟡 `MEDIUM`)
 - **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.cpp:1:1`](/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.cpp)
 - **Summary:** Template Method pattern: 'VFSFileObject' defines skeleton of algorithm in base class
 
 #### 🔎 Evidence Trail:
 - **+55%** `[TEMPLATE_METHOD_TEMPLATE_METHOD_SKELETON]` Class 'VFSFileObject' defines template algorithm skeleton with primitive operations: VFSFileObject, init_file_state, ~VFSFileObject, close, load_page_if_needed, flush_internal, read, write, truncate, seek, tell, size, flush _(at `/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.cpp:1:1`)_
+
+---
+
+### #54 BUILDER on builder_protocol `VFSBuilder`
+- **Confidence:** 69% (🟡 `MEDIUM`)
+- **Primary Location:** [`/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.h:1:1`](/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.h)
+- **Summary:** Builder pattern: protocol 'VFSBuilder' defines construction steps implemented by 0 concrete builders
+
+#### 🔎 Evidence Trail:
+- **+55%** `[BUILDER_BUILDER_PROTOCOL]` Protocol 'VFSBuilder' defines builder construction interface with methods: withCrypto _(at `/Volumes/External/Code/littlefs_v2/src/example/lfs_interface.h:1:1`)_
 
 ---

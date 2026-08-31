@@ -258,6 +258,71 @@ static bool test_fault_injection() {
     return true;
 }
 
+// 6. Test Builder Pattern & Statistics Decorator
+static bool test_builder_and_statistics() {
+    std::cout << "[*] Running Test: Builder Pattern & Statistics Decorator..." << std::endl;
+    
+    auto vfs_res = fs::VFSBuilder()
+        .withMemoryBackend(64 * 1024, 16)
+        .withCrypto(0xDEADBEEFCAFEBABEULL)
+        .withStatistics()
+        .buildCreate();
+
+    TEST_CHECK(vfs_res.has_value(), "VFSBuilder failed to construct VFS");
+    auto vfs = vfs_res.value();
+
+    auto open_res = vfs->open("builder_test.txt", fs::kFileWrite | fs::kFileCreateIfNotExists);
+    TEST_CHECK(open_res.has_value(), "Failed to open file in Builder VFS");
+
+    fs::FileHandle handle(open_res.value());
+    const std::string text = "Builder + Decorator Architecture Test";
+    handle->write(text.c_str(), text.size());
+    handle->flush();
+
+    std::cout << "[+] Test Builder Pattern & Statistics Decorator passed!" << std::endl;
+    return true;
+}
+
+// 7. Test C++ Stream Adapters (VFSOutputStream & VFSInputStream)
+static bool test_stream_adapters() {
+    std::cout << "[*] Running Test: Stream Adapters (VFSOutputStream & VFSInputStream)..." << std::endl;
+    
+    auto vfs_res = fs::VFSBuilder()
+        .withMemoryBackend(64 * 1024, 8)
+        .buildCreate();
+
+    TEST_CHECK(vfs_res.has_value(), "Failed to create VFS for stream testing");
+    auto vfs = vfs_res.value();
+
+    // Test Writing with standard C++ << operator
+    {
+        auto f_res = vfs->open("stream_data.txt", fs::kFileWrite | fs::kFileCreateIfNotExists);
+        TEST_CHECK(f_res.has_value(), "Failed to open stream write file");
+
+        fs::VFSOutputStream os(f_res.value());
+        os << "SensorID: " << 42 << " Temperature: " << 36.6 << "\n";
+        os << "Status: " << "ONLINE" << "\n";
+        os.flush();
+    }
+
+    // Test Reading with standard C++ >> operator and getline
+    {
+        auto f_res = vfs->open("stream_data.txt", fs::kFileRead);
+        TEST_CHECK(f_res.has_value(), "Failed to open stream read file");
+
+        fs::VFSInputStream is(f_res.value());
+        std::string line1, line2;
+        std::getline(is, line1);
+        std::getline(is, line2);
+
+        TEST_CHECK(line1 == "SensorID: 42 Temperature: 36.6", "Stream read mismatch on line 1");
+        TEST_CHECK(line2 == "Status: ONLINE", "Stream read mismatch on line 2");
+    }
+
+    std::cout << "[+] Test Stream Adapters passed with standard C++ iostreams!" << std::endl;
+    return true;
+}
+
 int main() {
     std::cout << "========================================" << std::endl;
     std::cout << " LittleFS v2 Test Suite & Verification " << std::endl;
@@ -269,6 +334,8 @@ int main() {
     ok &= test_thread_safety();
     ok &= test_crypto_layer();
     ok &= test_fault_injection();
+    ok &= test_builder_and_statistics();
+    ok &= test_stream_adapters();
 
     std::cout << "========================================" << std::endl;
     if (ok) {

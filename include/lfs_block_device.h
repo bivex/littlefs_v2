@@ -211,24 +211,18 @@ namespace fs {
         FILE* _file;
     };
 
-    // Decorator: Cryptographic block transformation (XOR / Scrambler per-block)
-    class CryptoBlockDevice : public IBlockDevice {
+    // Base Decorator (GoF Decorator Pattern)
+    class BlockDeviceDecorator : public IBlockDevice {
     public:
-        CryptoBlockDevice(std::shared_ptr<IBlockDevice> underlying, uint64_t key = 0xA5A55A5AA5A55A5AULL)
-            : _underlying(std::move(underlying)), _key(key) {}
+        explicit BlockDeviceDecorator(std::shared_ptr<IBlockDevice> underlying)
+            : _underlying(std::move(underlying)) {}
 
         int read(lfs_block_t block, lfs_off_t off, void* buffer, lfs_size_t size) override {
-            int res = _underlying->read(block, off, buffer, size);
-            if (res == LFS_ERR_OK) {
-                transform(block, off, static_cast<uint8_t*>(buffer), size);
-            }
-            return res;
+            return _underlying->read(block, off, buffer, size);
         }
 
         int write(lfs_block_t block, lfs_off_t off, const void* buffer, lfs_size_t size) override {
-            std::vector<uint8_t> encrypted(static_cast<const uint8_t*>(buffer), static_cast<const uint8_t*>(buffer) + size);
-            transform(block, off, encrypted.data(), size);
-            return _underlying->write(block, off, encrypted.data(), size);
+            return _underlying->write(block, off, buffer, size);
         }
 
         int erase(lfs_block_t block) override {
@@ -247,6 +241,32 @@ namespace fs {
         lfs_size_t get_block_count() const override { return _underlying->get_block_count(); }
         void set_block_count(lfs_size_t count) override { _underlying->set_block_count(count); }
 
+        std::shared_ptr<IBlockDevice> get_underlying() const noexcept { return _underlying; }
+
+    protected:
+        std::shared_ptr<IBlockDevice> _underlying;
+    };
+
+    // Decorator: Cryptographic block transformation (XOR / Scrambler per-block)
+    class CryptoBlockDevice : public BlockDeviceDecorator {
+    public:
+        CryptoBlockDevice(std::shared_ptr<IBlockDevice> underlying, uint64_t key = 0xA5A55A5AA5A55A5AULL)
+            : BlockDeviceDecorator(std::move(underlying)), _key(key) {}
+
+        int read(lfs_block_t block, lfs_off_t off, void* buffer, lfs_size_t size) override {
+            int res = _underlying->read(block, off, buffer, size);
+            if (res == LFS_ERR_OK) {
+                transform(block, off, static_cast<uint8_t*>(buffer), size);
+            }
+            return res;
+        }
+
+        int write(lfs_block_t block, lfs_off_t off, const void* buffer, lfs_size_t size) override {
+            std::vector<uint8_t> encrypted(static_cast<const uint8_t*>(buffer), static_cast<const uint8_t*>(buffer) + size);
+            transform(block, off, encrypted.data(), size);
+            return _underlying->write(block, off, encrypted.data(), size);
+        }
+
     private:
         void transform(lfs_block_t block, lfs_off_t off, uint8_t* data, lfs_size_t size) {
             uint64_t block_key = _key ^ (block * 0x9E3779B97F4A7C15ULL);
@@ -258,15 +278,65 @@ namespace fs {
             }
         }
 
-        std::shared_ptr<IBlockDevice> _underlying;
         uint64_t _key;
     };
 
-    // Decorator: Fault-Injection device for Chaos / Power-Loss testing
-    class FaultInjectBlockDevice : public IBlockDevice {
+    // Decorator: Telemetry & I/O Metrics monitoring
+    class StatisticsBlockDevice : public BlockDeviceDecorator {
     public:
-        FaultInjectBlockDevice(std::shared_ptr<IBlockDevice> underlying)
-            : _underlying(std::move(underlying)), _fail_after_writes(-1), _write_count(0), _corrupt_next_write(false) {}
+        struct Stats {
+            std::atomic<uint64_t> reads_count{0};
+            std::atomic<uint64_t> writes_count{0};
+            std::atomic<uint64_t> erases_count{0};
+            std::atomic<uint64_t> syncs_count{0};
+            std::atomic<uint64_t> bytes_read{0};
+            std::atomic<uint64_t> bytes_written{0};
+        };
+
+        explicit StatisticsBlockDevice(std::shared_ptr<IBlockDevice> underlying)
+            : BlockDeviceDecorator(std::move(underlying)) {}
+
+        int read(lfs_block_t block, lfs_off_t off, void* buffer, lfs_size_t size) override {
+            _stats.reads_count++;
+            _stats.bytes_read += size;
+            return _underlying->read(block, off, buffer, size);
+        }
+
+        int write(lfs_block_t block, lfs_off_t off, const void* buffer, lfs_size_t size) override {
+            _stats.writes_count++;
+            _stats.bytes_written += size;
+            return _underlying->write(block, off, buffer, size);
+        }
+
+        int erase(lfs_block_t block) override {
+            _stats.erases_count++;
+            return _underlying->erase(block);
+        }
+
+        int sync() override {
+            _stats.syncs_count++;
+            return _underlying->sync();
+        }
+
+        const Stats& get_stats() const noexcept { return _stats; }
+        void reset_stats() noexcept {
+            _stats.reads_count = 0;
+            _stats.writes_count = 0;
+            _stats.erases_count = 0;
+            _stats.syncs_count = 0;
+            _stats.bytes_read = 0;
+            _stats.bytes_written = 0;
+        }
+
+    private:
+        Stats _stats;
+    };
+
+    // Decorator: Fault-Injection device for Chaos / Power-Loss testing
+    class FaultInjectBlockDevice : public BlockDeviceDecorator {
+    public:
+        explicit FaultInjectBlockDevice(std::shared_ptr<IBlockDevice> underlying)
+            : BlockDeviceDecorator(std::move(underlying)), _fail_after_writes(-1), _write_count(0), _corrupt_next_write(false) {}
 
         void set_fail_after_writes(int count) {
             _fail_after_writes = count;
@@ -278,10 +348,6 @@ namespace fs {
         }
 
         int get_write_count() const { return _write_count.load(); }
-
-        int read(lfs_block_t block, lfs_off_t off, void* buffer, lfs_size_t size) override {
-            return _underlying->read(block, off, buffer, size);
-        }
 
         int write(lfs_block_t block, lfs_off_t off, const void* buffer, lfs_size_t size) override {
             if (_fail_after_writes >= 0 && _write_count >= _fail_after_writes) {
@@ -301,10 +367,6 @@ namespace fs {
             return _underlying->write(block, off, buffer, size);
         }
 
-        int erase(lfs_block_t block) override {
-            return _underlying->erase(block);
-        }
-
         int sync() override {
             if (_fail_after_writes >= 0 && _write_count >= _fail_after_writes) {
                 return LFS_ERR_IO;
@@ -312,19 +374,34 @@ namespace fs {
             return _underlying->sync();
         }
 
-        int allocate_block() override {
-            return _underlying->allocate_block();
-        }
-
-        lfs_size_t get_block_size() const override { return _underlying->get_block_size(); }
-        lfs_size_t get_block_count() const override { return _underlying->get_block_count(); }
-        void set_block_count(lfs_size_t count) override { _underlying->set_block_count(count); }
-
     private:
-        std::shared_ptr<IBlockDevice> _underlying;
         int _fail_after_writes;
         std::atomic<int> _write_count;
         bool _corrupt_next_write;
+    };
+
+    // Factory (GoF Factory Pattern)
+    class BlockDeviceFactory {
+    public:
+        static std::shared_ptr<IBlockDevice> createMemory(lfs_size_t block_size = 64 * 1024, lfs_size_t block_count = 8) {
+            return std::make_shared<MemoryBlockDevice>(block_size, block_count);
+        }
+
+        static std::shared_ptr<IBlockDevice> createFile(const std::string& path, lfs_size_t block_size = 64 * 1024, lfs_size_t block_count = 8, bool create_new = false) {
+            return std::make_shared<FileBlockDevice>(path, block_size, block_count, create_new);
+        }
+
+        static std::shared_ptr<IBlockDevice> wrapCrypto(std::shared_ptr<IBlockDevice> dev, uint64_t key) {
+            return std::make_shared<CryptoBlockDevice>(std::move(dev), key);
+        }
+
+        static std::shared_ptr<IBlockDevice> wrapFaultInjection(std::shared_ptr<IBlockDevice> dev) {
+            return std::make_shared<FaultInjectBlockDevice>(std::move(dev));
+        }
+
+        static std::shared_ptr<IBlockDevice> wrapStatistics(std::shared_ptr<IBlockDevice> dev) {
+            return std::make_shared<StatisticsBlockDevice>(std::move(dev));
+        }
     };
 
 } // namespace fs
