@@ -377,6 +377,18 @@ namespace fs {
         auto file_obj = std::make_shared<VFSFileObject>(_lfs_handle, _lfs_context);
 
         int err = lfs_file_open(_lfs_handle.get(), &file_obj->_file_handle, path.c_str(), lfs_flags);
+        if (err == LFS_ERR_NOENT && (flags & kFileCreateIfNotExists)) {
+            // Automatically ensure parent directories exist
+            size_t slash_pos = 0;
+            while ((slash_pos = path.find('/', slash_pos + 1)) != std::string::npos) {
+                std::string parent = path.substr(0, slash_pos);
+                if (!parent.empty() && parent != "." && parent != "/") {
+                    lfs_mkdir(_lfs_handle.get(), parent.c_str());
+                }
+            }
+            err = lfs_file_open(_lfs_handle.get(), &file_obj->_file_handle, path.c_str(), lfs_flags);
+        }
+
         if (err != LFS_ERR_OK) {
             return Result<std::shared_ptr<IFileObject>>(lfsToErrorCode(err));
         }

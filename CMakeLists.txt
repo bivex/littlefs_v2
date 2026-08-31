@@ -70,6 +70,10 @@ if(LITTLEFS_BUILD_BENCHMARKS)
     # Throughput, IOPS and Latency Benchmark
     add_executable(benchmark_throughput src/benchmarks/benchmark_throughput.cpp)
     target_link_libraries(benchmark_throughput PRIVATE littlefs_v2)
+
+    # Small Files Problem Benchmark
+    add_executable(benchmark_small_files src/benchmarks/benchmark_small_files.cpp)
+    target_link_libraries(benchmark_small_files PRIVATE littlefs_v2)
 endif()
 
 if(LITTLEFS_BUILD_TESTS)
