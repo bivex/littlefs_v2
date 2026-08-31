@@ -3,7 +3,7 @@
 > **Project:** `/Volumes/External/Code/littlefs_v2`  
 > **Scanned Files:** 25  
 > **Total Detections:** 53  
-> **Duration:** 0.811s  
+> **Duration:** 0.797s  
 
 ---
 
