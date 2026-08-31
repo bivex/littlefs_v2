@@ -236,8 +236,32 @@ int main(int argc, char** argv) {
     std::cout << "   - Pure Code Lines:        " << total_code_lines << " (" << std::fixed << std::setprecision(1) << (total_code_lines * 100.0 / std::max(1ULL, total_lines_all)) << "%)" << std::endl;
     std::cout << "   - Comment Lines:          " << total_comment_lines << " (" << (total_comment_lines * 100.0 / std::max(1ULL, total_lines_all)) << "%)" << std::endl;
     std::cout << "   - Blank Lines:            " << total_blank_lines << " (" << (total_blank_lines * 100.0 / std::max(1ULL, total_lines_all)) << "%)" << std::endl;
-    std::cout << " Integrity Verification:     " << (verified_count == stats_list.size() ? "100% PASSED (All files matched)" : "FAILED") << std::endl;
-    std::cout << " VFS Block Usage:            " << mem_dev->get_block_count() << " blocks (" << (mem_dev->get_block_count() * 64) << " KB allocated)" << std::endl;
+    std::cout << "\n### Language & Extension Breakdown\n" << std::endl;
+    std::cout << "| Extension | Files | Total Size | Total Lines | Code Lines | Comments | Blank Lines |" << std::endl;
+    std::cout << "|:----------|------:|-----------:|------------:|-----------:|---------:|------------:|" << std::endl;
+
+    for (const auto& [ext, ls] : lang_map) {
+        std::cout << "| " << std::left << std::setw(9) << ext
+                  << " | " << std::right << std::setw(5) << ls.file_count
+                  << " | " << std::right << std::setw(8) << (ls.total_bytes / 1024.0) << " KB"
+                  << " | " << std::right << std::setw(11) << ls.total_lines
+                  << " | " << std::right << std::setw(10) << ls.code_lines
+                  << " | " << std::right << std::setw(8) << ls.comment_lines
+                  << " | " << std::right << std::setw(11) << ls.blank_lines
+                  << " |" << std::endl;
+    }
+
+    std::cout << "\n### Sample Top 10 Largest Files in DPX-Cpp:\n" << std::endl;
+    std::sort(stats_list.begin(), stats_list.end(), [](const FileStats& a, const FileStats& b) {
+        return a.size_bytes > b.size_bytes;
+    });
+
+    for (size_t i = 0; i < std::min((size_t)10, stats_list.size()); ++i) {
+        std::cout << " " << std::setw(2) << (i + 1) << ". " << std::left << std::setw(55) << stats_list[i].rel_path
+                  << " (" << std::right << std::setw(6) << (stats_list[i].size_bytes / 1024.0) << " KB, "
+                  << std::setw(5) << stats_list[i].total_lines << " lines)" << std::endl;
+    }
+
     std::cout << "\n==========================================================================================" << std::endl;
     return 0;
 }
