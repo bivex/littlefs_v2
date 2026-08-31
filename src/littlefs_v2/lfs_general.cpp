@@ -749,7 +749,7 @@ int lfs_raw_mount(lfs_t* lfs, lfs_config_t* cfg) {
                     if (lfs->cfg->block_size
                         || superblock.block_size % lfs->erase_size != 0
                         || superblock.block_size < lfs->block_size) {
-                        LFS_ERROR("Invalid block size %"PRIu32,
+                        LFS_ERROR("Invalid block size %" PRIu64,
                             superblock.block_size);
                         err = LFS_ERR_INVAL;
                         goto cleanup;
@@ -765,7 +765,7 @@ int lfs_raw_mount(lfs_t* lfs, lfs_config_t* cfg) {
                     if (lfs->cfg->block_count
                         || superblock.block_count > lfs->block_count) {
 
-                        LFS_ERROR("Invalid block count %"PRIu32, superblock.block_count);
+                        LFS_ERROR("Invalid block count %" PRIu64, superblock.block_count);
                         err = LFS_ERR_INVAL;
                         goto cleanup;
                     }
@@ -780,7 +780,7 @@ int lfs_raw_mount(lfs_t* lfs, lfs_config_t* cfg) {
                 if ((major_version != LFS_DISK_VERSION_MAJOR ||
                     minor_version > LFS_DISK_VERSION_MINOR)) {
 
-                    LFS_ERROR("Invalid version v%"PRIu16".%"PRIu16, major_version, minor_version);
+                    LFS_ERROR("Invalid version v%" PRIu16 ".%" PRIu16, major_version, minor_version);
                     err = LFS_ERR_INVAL;
                     goto cleanup;
                 }
@@ -790,7 +790,7 @@ int lfs_raw_mount(lfs_t* lfs, lfs_config_t* cfg) {
 
                     if (superblock.name_max_length > lfs->name_max_length) {
 
-                        LFS_ERROR("Unsupported name_max %"PRIu32, superblock.name_max);
+                        LFS_ERROR("Unsupported name_max %" PRIu64, superblock.name_max_length);
                         err = LFS_ERR_INVAL;
                         goto cleanup;
                     }
@@ -801,7 +801,7 @@ int lfs_raw_mount(lfs_t* lfs, lfs_config_t* cfg) {
                 if (superblock.file_max_size) {
                     if (superblock.file_max_size > lfs->file_max_size) {
 
-                        LFS_ERROR("Unsupported file_max %"PRIu32, superblock.file_max);
+                        LFS_ERROR("Unsupported file_max %" PRIu64, superblock.file_max_size);
                         err = LFS_ERR_INVAL;
                         goto cleanup;
                     }
@@ -812,7 +812,7 @@ int lfs_raw_mount(lfs_t* lfs, lfs_config_t* cfg) {
                 if (superblock.attr_max_size) {
                     if (superblock.attr_max_size > lfs->attr_max_size) {
 
-                        LFS_ERROR("Unsupported attr_max %"PRIu32, superblock.attr_max);
+                        LFS_ERROR("Unsupported attr_max %" PRIu64, superblock.attr_max_size);
                         err = LFS_ERR_INVAL;
                         goto cleanup;
                     }
@@ -866,7 +866,7 @@ int lfs_raw_mount(lfs_t* lfs, lfs_config_t* cfg) {
     // update littlefs with gstate
     if (!lfs_gstate_iszero(&lfs->gstate)) {
 
-        LFS_DEBUG("Found pending gstate 0x%08"PRIx32"%08"PRIx32"%08"PRIx32,
+        LFS_DEBUG("Found pending gstate 0x%08" PRIx32 "%016" PRIx64 "%016" PRIx64,
             lfs->gstate.tag,
             lfs->gstate.pair[0],
             lfs->gstate.pair[1]);

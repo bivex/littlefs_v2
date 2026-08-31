@@ -297,7 +297,7 @@ int lfs_file_relocate(lfs_t* lfs, lfs_file_t* file) {
         return LFS_ERR_OK;
 
     relocate:
-        LFS_DEBUG("Bad block at 0x%"PRIx32, nblock);
+        LFS_DEBUG("Bad block at 0x%" PRIx64, nblock);
 
         // just clear cache and try a new block
         lfs_cache_drop(lfs, &lfs->write_cache);
@@ -390,7 +390,7 @@ int lfs_file_flush(lfs_t* lfs, lfs_file_t* file) {
                 break;
 
             relocate:
-                LFS_DEBUG("Bad block at 0x%"PRIx32, file->block);
+                LFS_DEBUG("Bad block at 0x%" PRIx64, file->block);
                 err = lfs_file_relocate(lfs, file);
                 if (err) {
                     return err;

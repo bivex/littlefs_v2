@@ -63,7 +63,7 @@ int lfs_alloc(lfs_t* lfs, lfs_block_t* block) {
             if (!lfs->cfg->allocate_block ||
                 lfs->cfg->allocate_block((lfs_config_t*)lfs->cfg) == LFS_ERR_NOSPC) {
 
-                LFS_ERROR("No more free space %"PRIu32, lfs->free.i + lfs->free.offset);
+                LFS_ERROR("No more free space %" PRIu64, lfs->free.i + lfs->free.offset);
                 return LFS_ERR_NOSPC;
             }
 

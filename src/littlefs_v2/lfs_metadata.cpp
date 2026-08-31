@@ -702,7 +702,7 @@ lfs_stag_t lfs_dir_fetchmatch(lfs_t* lfs,
     }
 
     if (!lfs_pair_isnull(lfs->root)) {
-        LFS_ERROR("Corrupted dir pair at {0x%"PRIx32", 0x%"PRIx32"}", dir->pair[0], dir->pair[1]);
+        LFS_ERROR("Corrupted dir pair at {0x%" PRIx64 ", 0x%" PRIx64 "}", dir->pair[0], dir->pair[1]);
     }
 
     return LFS_ERR_CORRUPT;

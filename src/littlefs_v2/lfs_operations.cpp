@@ -228,10 +228,10 @@ int lfs_fs_demove(lfs_t* lfs) {
     }
 
     // Fix bad moves
-    LFS_DEBUG("Fixing move {0x%"PRIx32", 0x%"PRIx32"} 0x%"PRIx16,
+    LFS_DEBUG("Fixing move {0x%" PRIx64 ", 0x%" PRIx64 "} 0x%" PRIx16,
         lfs->gdisk.pair[0],
         lfs->gdisk.pair[1],
-        lfs_tag_id(lfs->gdisk.tag));
+        (uint16_t)lfs_tag_id(lfs->gdisk.tag));
 
     // fetch and delete the moved entry
     lfs_metadata_dir_t movedir;
@@ -321,7 +321,7 @@ restart:
 
                     if (!lfs_pair_sync(pair, pdir.tail)) {
                         // we have desynced
-                        LFS_DEBUG("Fixing half-orphan {0x%"PRIx32", 0x%"PRIx32"} -> {0x%"PRIx32", 0x%"PRIx32"}", pdir.tail[0], pdir.tail[1], pair[0], pair[1]);
+                        LFS_DEBUG("Fixing half-orphan {0x%" PRIx64 ", 0x%" PRIx64 "} -> {0x%" PRIx64 ", 0x%" PRIx64 "}", pdir.tail[0], pdir.tail[1], pair[0], pair[1]);
 
                         // fix pending move in this pair? this looks like an
                         // optimization but is in fact _required_ since
@@ -331,14 +331,15 @@ restart:
 
                             moveid = lfs_tag_id(lfs->gstate.tag);
                             
-                            LFS_DEBUG("Fixing move while fixing orphans {0x%"PRIx32", 0x%"PRIx32"} 0x%"PRIx16"\n", pdir.pair[0], pdir.pair[1], moveid); lfs_fs_prepmove(lfs, 0x3ff, NULL);
+                            LFS_DEBUG("Fixing move while fixing orphans {0x%" PRIx64 ", 0x%" PRIx64 "} 0x%" PRIx16 "\n", pdir.pair[0], pdir.pair[1], moveid);
+                            lfs_fs_prepmove(lfs, 0x3ff, NULL);
                         }
 
                         lfs_pair_tole64(pair);
 
                         lfs_metadata_attribute_t attr[] = {
-                            { LFS_MKTAG_IF(moveid != 0x3ff, LFS_TYPE_DELETE, moveid, 0), NULL },
-                            { LFS_MKTAG(LFS_TYPE_SOFTTAIL, 0x3ff, sizeof(pair)), pair }
+                            { (lfs_tag_t)LFS_MKTAG_IF(moveid != 0x3ff, LFS_TYPE_DELETE, moveid, 0), NULL },
+                            { (lfs_tag_t)LFS_MKTAG(LFS_TYPE_SOFTTAIL, 0x3ff, sizeof(pair)), pair }
                         };
 
                         state = lfs_dir_orphaning_commit(lfs, &pdir, attr, _countof(attr));
@@ -366,7 +367,7 @@ restart:
                 if (pass == 1 && tag == LFS_ERR_NOENT && powerloss) {
 
                     // we are an orphan
-                    LFS_DEBUG("Fixing orphan {0x%"PRIx32", 0x%"PRIx32"}", pdir.tail[0], pdir.tail[1]);
+                    LFS_DEBUG("Fixing orphan {0x%" PRIx64 ", 0x%" PRIx64 "}", pdir.tail[0], pdir.tail[1]);
 
                     // steal state
                     err = lfs_dir_getgstate(lfs, &dir, &lfs->gdelta);
@@ -375,17 +376,30 @@ restart:
                         return err;
                     }
 
-                    // steal tail
-                    lfs_pair_tole64(dir.tail);
+                    // stolen this state, now we can remove the orphan
+                    lfs_block_t pair[2];
+                    tag = lfs_dir_get(lfs, &dir, LFS_MKTAG(0x7ff, 0x3ff, 0),
+                        LFS_MKTAG(LFS_TYPE_SOFTTAIL, 0x3ff, 8), pair);
+
+                    if (tag < 0 && tag != LFS_ERR_NOENT) {
+
+                        return tag;
+                    }
+
+                    if (tag != LFS_ERR_NOENT) {
+
+                        lfs_pair_fromle64(pair);
+                    }
+                    else {
+
+                        lfs_pair_tole64(pair);
+                    }
 
                     lfs_metadata_attribute_t attr[] = {
-                        { LFS_MKTAG(LFS_TYPE_TAIL + dir.split, 0x3ff, sizeof(dir.tail)), dir.tail }
+                        { (lfs_tag_t)LFS_MKTAG(LFS_TYPE_TAIL + dir.split, 0x3ff, sizeof(dir.tail)), dir.tail }
                     };
 
                     int state = lfs_dir_orphaning_commit(lfs, &pdir, attr, _countof(attr));
-
-                    lfs_pair_fromle64(dir.tail);
-
                     if (state < 0) {
                         return state;
                     }
@@ -489,8 +503,10 @@ int lfs_fs_rawgrow(lfs_t* lfs, lfs_size_t block_count) {
 
         // update the superblock
         lfs_superblock_t superblock;
-        lfs_stag_t tag = lfs_dir_get(lfs, &root, LFS_MKTAG(LFS_TYPE_MOVESTATE, 0x3ff, 0),
-            LFS_MKTAG(LFS_TYPE_INLINESTRUCT, 0, sizeof(superblock)), &superblock);
+        lfs_stag_t tag = lfs_dir_get(lfs, &root,
+            LFS_MKTAG(0x7ff, 0x3ff, 0),
+            LFS_MKTAG(LFS_TYPE_SUPERBLOCK, 0, sizeof(superblock)),
+            &superblock);
 
         if (tag < 0) {
 
@@ -504,7 +520,7 @@ int lfs_fs_rawgrow(lfs_t* lfs, lfs_size_t block_count) {
         lfs_superblock_tole64(&superblock);
 
         lfs_metadata_attribute_t attr[] = {
-            { static_cast<lfs_tag_t>(tag), &superblock }
+            { (lfs_tag_t)tag, &superblock }
         };
 
         err = lfs_dir_commit(lfs, &root, attr, _countof(attr));

@@ -24,17 +24,17 @@ int lfs_format(lfs_t* lfs, lfs_config_t* cfg) {
 
     LFS_TRACE("lfs_format(%p, %p {.context=%p, "
         ".read=%p, .prog=%p, .erase=%p, .sync=%p, "
-        ".read_size=%"PRIu32", .prog_size=%"PRIu32", "
-        ".block_size=%"PRIu32", .block_count=%"PRIu32", "
-        ".block_cycles=%"PRIu32", .cache_size=%"PRIu32", "
-        ".lookahead_size=%"PRIu32", .read_buffer=%p, "
+        ".read_size=%" PRIu64 ", .prog_size=%" PRIu64 ", "
+        ".block_size=%" PRIu64 ", .block_count=%" PRIu64 ", "
+        ".block_cycles=%" PRId32 ", .cache_size=%" PRIu64 ", "
+        ".lookahead_size=%" PRIu64 ", .read_buffer=%p, "
         ".prog_buffer=%p, .lookahead_buffer=%p, "
-        ".name_max_length=%"PRIu32", .file_max_size=%"PRIu32", "
-        ".attr_max_size=%"PRIu32"})",
+        ".name_max_length=%" PRIu64 ", .file_max_size=%" PRIu64 ", "
+        ".attr_max_size=%" PRIu64 "})",
         (void*)lfs, (void*)cfg, cfg->context,
-        (void*)(uintptr_t)cfg->read, (void*)(uintptr_t)cfg->prog,
+        (void*)(uintptr_t)cfg->read, (void*)(uintptr_t)cfg->write,
         (void*)(uintptr_t)cfg->erase, (void*)(uintptr_t)cfg->sync,
-        cfg->read_size, cfg->prog_size, cfg->block_size, cfg->block_count,
+        cfg->read_size, cfg->write_size, cfg->block_size, cfg->block_count,
         cfg->block_cycles, cfg->cache_size, cfg->lookahead_size,
         cfg->read_buffer, cfg->write_buffer, cfg->lookahead_buffer,
         cfg->name_max_length, cfg->file_max_size, cfg->attr_max_size);
@@ -56,17 +56,17 @@ int lfs_mount(lfs_t* lfs, lfs_config_t* cfg) {
 
     LFS_TRACE("lfs_mount(%p, %p {.context=%p, "
         ".read=%p, .prog=%p, .erase=%p, .sync=%p, "
-        ".read_size=%"PRIu32", .prog_size=%"PRIu32", "
-        ".block_size=%"PRIu32", .block_count=%"PRIu32", "
-        ".block_cycles=%"PRIu32", .cache_size=%"PRIu32", "
-        ".lookahead_size=%"PRIu32", .read_buffer=%p, "
+        ".read_size=%" PRIu64 ", .prog_size=%" PRIu64 ", "
+        ".block_size=%" PRIu64 ", .block_count=%" PRIu64 ", "
+        ".block_cycles=%" PRId32 ", .cache_size=%" PRIu64 ", "
+        ".lookahead_size=%" PRIu64 ", .read_buffer=%p, "
         ".prog_buffer=%p, .lookahead_buffer=%p, "
-        ".name_max_length=%"PRIu32", .file_max_size=%"PRIu32", "
-        ".attr_max_size=%"PRIu32"})",
+        ".name_max_length=%" PRIu64 ", .file_max_size=%" PRIu64 ", "
+        ".attr_max_size=%" PRIu64 "})",
         (void*)lfs, (void*)cfg, cfg->context,
-        (void*)(uintptr_t)cfg->read, (void*)(uintptr_t)cfg->prog,
+        (void*)(uintptr_t)cfg->read, (void*)(uintptr_t)cfg->write,
         (void*)(uintptr_t)cfg->erase, (void*)(uintptr_t)cfg->sync,
-        cfg->read_size, cfg->prog_size, cfg->block_size, cfg->block_count,
+        cfg->read_size, cfg->write_size, cfg->block_size, cfg->block_count,
         cfg->block_cycles, cfg->cache_size, cfg->lookahead_size,
         cfg->read_buffer, cfg->write_buffer, cfg->lookahead_buffer,
         cfg->name_max_length, cfg->file_max_size, cfg->attr_max_size);
@@ -158,12 +158,12 @@ lfs_ssize_t lfs_get_attribute(lfs_t* lfs, const char* path, uint8_t type, void* 
         return err;
     }
 
-    LFS_TRACE("lfs_getattr(%p, \"%s\", %"PRIu8", %p, %"PRIu32")",
+    LFS_TRACE("lfs_getattr(%p, \"%s\", %" PRIu8 ", %p, %" PRIu64 ")",
         (void*)lfs, path, type, buffer, size);
 
     lfs_ssize_t res = lfs_raw_get_attribute(lfs, path, type, buffer, size);
 
-    LFS_TRACE("lfs_getattr -> %"PRId32, res);
+    LFS_TRACE("lfs_getattr -> %" PRId64, res);
     LFS_UNLOCK(lfs->cfg);
     return res;
 }
@@ -177,7 +177,7 @@ int lfs_set_attribute(lfs_t* lfs, const char* path, uint8_t type, const void* bu
         return err;
     }
 
-    LFS_TRACE("lfs_setattr(%p, \"%s\", %"PRIu8", %p, %"PRIu32")",
+    LFS_TRACE("lfs_setattr(%p, \"%s\", %" PRIu8 ", %p, %" PRIu64 ")",
         (void*)lfs, path, type, buffer, size);
 
     err = lfs_raw_set_attribute(lfs, path, type, buffer, size);
@@ -195,7 +195,7 @@ int lfs_remove_attribute(lfs_t* lfs, const char* path, uint8_t type) {
         return err;
     }
 
-    LFS_TRACE("lfs_removeattr(%p, \"%s\", %"PRIu8")", (void*)lfs, path, type);
+    LFS_TRACE("lfs_removeattr(%p, \"%s\", %" PRIu8 ")", (void*)lfs, path, type);
 
     err = lfs_raw_remove_attribute(lfs, path, type);
 
@@ -234,7 +234,7 @@ int lfs_file_opencfg(lfs_t* lfs, lfs_file_t* file, const char* path, int flags, 
     }
 
     LFS_TRACE("lfs_file_opencfg(%p, %p, \"%s\", %x, %p {"
-        ".buffer=%p, .attrs=%p, .attr_count=%"PRIu32"})",
+        ".buffer=%p, .attrs=%p, .attr_count=%" PRIu64 "})",
         (void*)lfs, (void*)file, path, flags,
         (void*)cfg, cfg->buffer, (void*)cfg->attrs, cfg->attr_count);
     LFS_ASSERT(!lfs_mlist_isopen(lfs->metadata_list, (lfs_metadata_list_t*)file));
@@ -289,13 +289,13 @@ lfs_ssize_t lfs_file_read(lfs_t* lfs, lfs_file_t* file, void* buffer, lfs_size_t
         return err;
     }
 
-    LFS_TRACE("lfs_file_read(%p, %p, %p, %"PRIu32")",
+    LFS_TRACE("lfs_file_read(%p, %p, %p, %" PRIu64 ")",
         (void*)lfs, (void*)file, buffer, size);
     LFS_ASSERT(lfs_mlist_isopen(lfs->metadata_list, (lfs_metadata_list_t*)file));
 
     lfs_ssize_t res = lfs_file_rawread(lfs, file, buffer, size);
 
-    LFS_TRACE("lfs_file_read -> %"PRId32, res);
+    LFS_TRACE("lfs_file_read -> %" PRId64, res);
     LFS_UNLOCK(lfs->cfg);
     return res;
 }
@@ -308,12 +308,12 @@ lfs_ssize_t lfs_file_write(lfs_t* lfs, lfs_file_t* file, const void* buffer, lfs
         return err;
     }
 
-    LFS_TRACE("lfs_file_write(%p, %p, %p, %"PRIu32")", (void*)lfs, (void*)file, buffer, size);
+    LFS_TRACE("lfs_file_write(%p, %p, %p, %" PRIu64 ")", (void*)lfs, (void*)file, buffer, size);
     LFS_ASSERT(lfs_mlist_isopen(lfs->metadata_list, (lfs_metadata_list_t*)file));
 
     lfs_ssize_t res = lfs_file_rawwrite(lfs, file, buffer, size);
 
-    LFS_TRACE("lfs_file_write -> %"PRId32, res);
+    LFS_TRACE("lfs_file_write -> %" PRId64, res);
     LFS_UNLOCK(lfs->cfg);
     return res;
 }
@@ -326,12 +326,12 @@ lfs_soff_t lfs_file_seek(lfs_t* lfs, lfs_file_t* file, lfs_soff_t off, int whenc
         return err;
     }
 
-    LFS_TRACE("lfs_file_seek(%p, %p, %"PRId32", %d)", (void*)lfs, (void*)file, off, whence);
+    LFS_TRACE("lfs_file_seek(%p, %p, %" PRId64 ", %d)", (void*)lfs, (void*)file, off, whence);
     LFS_ASSERT(lfs_mlist_isopen(lfs->metadata_list, (lfs_metadata_list_t*)file));
 
     lfs_soff_t res = lfs_file_rawseek(lfs, file, off, whence);
 
-    LFS_TRACE("lfs_file_seek -> %"PRId32, res);
+    LFS_TRACE("lfs_file_seek -> %" PRId64, res);
     LFS_UNLOCK(lfs->cfg);
     return res;
 }
@@ -344,12 +344,12 @@ lfs_soff_t lfs_file_truncate(lfs_t* lfs, lfs_file_t* file, lfs_off_t size) {
         return err;
     }
 
-    LFS_TRACE("lfs_file_truncate(%p, %p, %"PRIu32")", (void*)lfs, (void*)file, size);
+    LFS_TRACE("lfs_file_truncate(%p, %p, %" PRIu64 ")", (void*)lfs, (void*)file, size);
     LFS_ASSERT(lfs_mlist_isopen(lfs->metadata_list, (lfs_metadata_list_t*)file));
 
     err = lfs_file_rawtruncate(lfs, file, size);
 
-    LFS_TRACE("lfs_file_truncate -> %d", err);
+    LFS_TRACE("lfs_file_truncate -> %" PRId64, err);
     LFS_UNLOCK(lfs->cfg);
     return err;
 }
@@ -367,7 +367,7 @@ lfs_soff_t lfs_file_tell(lfs_t* lfs, lfs_file_t* file) {
 
     lfs_soff_t res = lfs_file_rawtell(lfs, file);
 
-    LFS_TRACE("lfs_file_tell -> %"PRId32, res);
+    LFS_TRACE("lfs_file_tell -> %" PRId64, res);
     LFS_UNLOCK(lfs->cfg);
     return res;
 }
@@ -384,7 +384,7 @@ lfs_soff_t lfs_file_rewind(lfs_t* lfs, lfs_file_t* file) {
 
     err = lfs_file_rawrewind(lfs, file);
 
-    LFS_TRACE("lfs_file_rewind -> %d", err);
+    LFS_TRACE("lfs_file_rewind -> %" PRId64, err);
     LFS_UNLOCK(lfs->cfg);
     return err;
 }
@@ -402,7 +402,7 @@ lfs_soff_t lfs_file_size(lfs_t* lfs, lfs_file_t* file) {
 
     lfs_soff_t res = lfs_file_rawsize(lfs, file);
 
-    LFS_TRACE("lfs_file_size -> %"PRId32, res);
+    LFS_TRACE("lfs_file_size -> %" PRId64, res);
     LFS_UNLOCK(lfs->cfg);
     return res;
 }
@@ -485,7 +485,7 @@ int lfs_dir_seek(lfs_t* lfs, lfs_dir_t* dir, lfs_off_t off) {
         return err;
     }
 
-    LFS_TRACE("lfs_dir_seek(%p, %p, %"PRIu32")",
+    LFS_TRACE("lfs_dir_seek(%p, %p, %" PRIu64 ")",
         (void*)lfs, (void*)dir, off);
 
     err = lfs_dir_rawseek(lfs, dir, off);
@@ -507,7 +507,7 @@ lfs_soff_t lfs_dir_tell(lfs_t* lfs, lfs_dir_t* dir) {
 
     lfs_soff_t res = lfs_dir_rawtell(lfs, dir);
 
-    LFS_TRACE("lfs_dir_tell -> %"PRId32, res);
+    LFS_TRACE("lfs_dir_tell -> %" PRId64, res);
     LFS_UNLOCK(lfs->cfg);
     return res;
 }
@@ -555,7 +555,7 @@ lfs_ssize_t lfs_fs_size(lfs_t* lfs) {
 
     lfs_ssize_t res = lfs_fs_rawsize(lfs);
 
-    LFS_TRACE("lfs_fs_size -> %"PRId32, res);
+    LFS_TRACE("lfs_fs_size -> %" PRId64, res);
     LFS_UNLOCK(lfs->cfg);
     return res;
 }
@@ -582,7 +582,7 @@ int lfs_fs_grow(lfs_t* lfs, lfs_size_t block_count) {
     if (err) {
         return err;
     }
-    LFS_TRACE("lfs_fs_grow(%p, %"PRIu32")", (void*)lfs, block_count);
+    LFS_TRACE("lfs_fs_grow(%p, %" PRIu64 ")", (void*)lfs, block_count);
 
     err = lfs_fs_rawgrow(lfs, block_count);
 

@@ -8,6 +8,9 @@
 
 * **Modular C++ Architecture**: Decoupled the original monolithic C codebase into dedicated, maintainable modules (`lfs_allocator`, `lfs_commit`, `lfs_directory`, `lfs_file`, `lfs_file_index`, `lfs_metadata`, `lfs_operations`, `lfs_toplevel`).
 * **Thread-Safety & Locking**: Built-in recursive mutex locking across all VFS and file handle operations (`LFS_THREADSAFE`), ensuring full safety in concurrent multi-threaded environments.
+* **High-Performance Page Cache Layer**:
+  * $O(1)$ random seek, read, and size calculation in memory.
+  * **Batched Flush**: Aggregates thousands of random in-memory writes into sequential disk commits, avoiding CTZ skip-list relocation overhead.
 * **Modern Error Handling & RAII**:
   * `fs::Result<T, ErrorCode>` type eliminating raw negative error codes and enabling ergonomic value/error checking.
   * Move-only RAII `fs::FileHandle` that guarantees automatic `flush()` and `close()` upon destruction.

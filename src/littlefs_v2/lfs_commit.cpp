@@ -500,7 +500,7 @@ int lfs_dir_compact(lfs_t* lfs,
         lfs_cache_drop(lfs, &lfs->write_cache);
 
         if (!tired) {
-            LFS_DEBUG("Bad block at 0x%"PRIx32, dir->pair[1]);
+            LFS_DEBUG("Bad block at 0x%" PRIx64, dir->pair[1]);
         }
 
         // can't relocate superblock, filesystem is now frozen
@@ -509,7 +509,7 @@ int lfs_dir_compact(lfs_t* lfs,
 
         if (lfs_pair_cmp(dir->pair, _blocks) == 0) {
 
-            LFS_WARN("Superblock 0x%"PRIx32" has become unwritable", dir->pair[1]);
+            LFS_WARN("Superblock 0x%" PRIx64 " has become unwritable", dir->pair[1]);
             return LFS_ERR_NOSPC;
         }
 
@@ -599,7 +599,7 @@ int lfs_dir_splittingcompact(lfs_t* lfs, lfs_metadata_dir_t* dir,
 
             // we can't allocate a new block, try to compact with degraded
             // performance
-            LFS_WARN("Unable to split {0x%"PRIx32", 0x%"PRIx32"}", dir->pair[0], dir->pair[1]);
+            LFS_WARN("Unable to split {0x%" PRIx64 ", 0x%" PRIx64 "}", dir->pair[0], dir->pair[1]);
             break;
 
         }
@@ -627,7 +627,7 @@ int lfs_dir_splittingcompact(lfs_t* lfs, lfs_metadata_dir_t* dir,
         // by itself, so expand cautiously
         if ((lfs_size_t)size < lfs->block_count / 2) {
 
-            LFS_DEBUG("Expanding superblock at revision_count %"PRIu32, dir->revision_count);
+            LFS_DEBUG("Expanding superblock at revision_count %" PRIu32, dir->revision_count);
 
             int err = lfs_dir_split(lfs, dir, attrs, attrcount, source, begin, end);
 
@@ -951,8 +951,8 @@ int lfs_dir_orphaning_commit(lfs_t* lfs, lfs_metadata_dir_t* dir, const lfs_meta
     bool orphans = false;
     while (state == LFS_OK_RELOCATED) {
 
-        LFS_DEBUG("Relocating {0x%"PRIx32", 0x%"PRIx32"} "
-            "-> {0x%"PRIx32", 0x%"PRIx32"}",
+        LFS_DEBUG("Relocating {0x%" PRIx64 ", 0x%" PRIx64 "} "
+            "-> {0x%" PRIx64 ", 0x%" PRIx64 "}",
             lpair[0], lpair[1], ldir.pair[0], ldir.pair[1]);
         state = 0;
 
@@ -1006,7 +1006,7 @@ int lfs_dir_orphaning_commit(lfs_t* lfs, lfs_metadata_dir_t* dir, const lfs_meta
 
                 moveid = lfs_tag_id(lfs->gstate.tag);
                 LFS_DEBUG("Fixing move while relocating "
-                    "{0x%"PRIx32", 0x%"PRIx32"} 0x%"PRIx16"\n",
+                    "{0x%" PRIx64 ", 0x%" PRIx64 "} 0x%" PRIx16 "\n",
                     pdir.pair[0], pdir.pair[1], moveid);
 
                 lfs_fs_prepmove(lfs, 0x3ff, NULL);
@@ -1021,7 +1021,7 @@ int lfs_dir_orphaning_commit(lfs_t* lfs, lfs_metadata_dir_t* dir, const lfs_meta
             lfs_pair_tole64(ldir.pair);
 
             lfs_metadata_attribute_t attr[] = {
-                { LFS_MKTAG_IF(moveid != 0x3ff, LFS_TYPE_DELETE, moveid, 0), NULL }, 
+                { (lfs_tag_t)LFS_MKTAG_IF(moveid != 0x3ff, LFS_TYPE_DELETE, moveid, 0), NULL }, 
                 { lfs_tag_t(tag), ldir.pair }
             };
 
@@ -1073,7 +1073,7 @@ int lfs_dir_orphaning_commit(lfs_t* lfs, lfs_metadata_dir_t* dir, const lfs_meta
 
                 moveid = lfs_tag_id(lfs->gstate.tag);
                 LFS_DEBUG("Fixing move while relocating "
-                    "{0x%"PRIx32", 0x%"PRIx32"} 0x%"PRIx16"\n",
+                    "{0x%" PRIx64 ", 0x%" PRIx64 "} 0x%" PRIx16 "\n",
                     pdir.pair[0], pdir.pair[1], moveid);
 
                 lfs_fs_prepmove(lfs, 0x3ff, NULL);
@@ -1085,8 +1085,8 @@ int lfs_dir_orphaning_commit(lfs_t* lfs, lfs_metadata_dir_t* dir, const lfs_meta
             lfs_pair_tole64(ldir.pair);
 
             lfs_metadata_attribute_t attr[] = {
-                { LFS_MKTAG_IF(moveid != 0x3ff, LFS_TYPE_DELETE, moveid, 0), NULL },
-                { LFS_MKTAG(LFS_TYPE_TAIL + pdir.split, 0x3ff, sizeof(ldir.pair)), ldir.pair }
+                { (lfs_tag_t)LFS_MKTAG_IF(moveid != 0x3ff, LFS_TYPE_DELETE, moveid, 0), NULL },
+                { (lfs_tag_t)LFS_MKTAG(LFS_TYPE_SOFTTAIL, 0x3ff, sizeof(ldir.pair)), ldir.pair }
             };
 
             state = lfs_dir_relocating_commit(lfs, &pdir, lpair, attr, _countof(attr), NULL);

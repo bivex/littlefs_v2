@@ -6,6 +6,9 @@
 
 #include "lfs_interface.h"
 
+#if defined(_MSC_VER)
+#pragma comment(lib, "littlefs_v2.lib")
+#endif
 int main() {
     std::cout << "=== littlefs_v2 High-Performance VFS Benchmark ===" << std::endl;
 
