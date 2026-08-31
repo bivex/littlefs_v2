@@ -171,6 +171,19 @@ littlefs_v2/
 │   │   └── example.cpp          # Demo application
 │   └── tests/                 # Verification & Chaos Test Suite
 │       └── test_main.cpp        # Tests: CRUD, Auto-Grow, Concurrency, Crypto, Fault-Injection
-└── docs/
-    └── vfs_value_and_architecture.md # Technical and architectural documentation
+└── docs/                      # Documentation
+    ├── api_reference.md       # Complete C++ API & types reference
+    ├── architecture_deep_dive.md # CTZ skip-lists, dual-block pairs & TLV logs
+    ├── benchmarks.md          # Comprehensive throughput and latency metrics
+    └── vfs_value_and_architecture.md # Commercial value, ROI, and use-cases
 ```
+
+---
+
+## 📚 Documentation Index
+
+* 📖 [**C++ API Reference**](docs/api_reference.md) — Detailed class and function documentation for `IFileSystemDevice`, `IFileObject`, `FileHandle`, `IBlockDevice`, and `Result<T, E>`.
+* 🔬 [**Architecture Deep Dive**](docs/architecture_deep_dive.md) — In-depth explanation of CTZ skip-lists, dual-block metadata pairs, TLV commit logs, and lookahead allocation.
+* ⚡ [**Performance Benchmarks**](docs/benchmarks.md) — Comprehensive throughput (up to 16.8 GB/s), IOPS (> 834k), latency, and multi-threading scalability reports.
+* 💼 [**Commercial Value & Use Cases**](docs/vfs_value_and_architecture.md) — Business ROI, cloud IOPS cost reduction, IP protection/encryption, and plugin isolation.
+
