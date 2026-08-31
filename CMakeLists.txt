@@ -34,6 +34,10 @@ target_link_libraries(example PRIVATE littlefs_v2)
 add_executable(tests_runner src/tests/test_main.cpp)
 target_link_libraries(tests_runner PRIVATE littlefs_v2)
 
+# Benchmark Throughput executable
+add_executable(benchmark_throughput src/benchmarks/benchmark_throughput.cpp)
+target_link_libraries(benchmark_throughput PRIVATE littlefs_v2)
+
 # Enable CTest
 enable_testing()
 add_test(NAME LittleFSTests COMMAND tests_runner)
