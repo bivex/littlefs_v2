@@ -1,18 +1,18 @@
 {
   "project_path": "/Volumes/External/Code/littlefs_v2",
   "scanned_files_count": 25,
-  "total_detections": 53,
-  "elapsed_seconds": 0.7966,
+  "total_detections": 52,
+  "elapsed_seconds": 0.7999,
   "summary_by_category": {
     "creational": 0,
     "structural": 0,
     "behavioral": 3,
     "architectural": 0,
     "concurrency": 0,
-    "principle": 50
+    "principle": 49
   },
   "summary_by_type": {
-    "kiss": 37,
+    "kiss": 36,
     "open_closed": 1,
     "strategy": 1,
     "single_responsibility": 1,
@@ -21,93 +21,12 @@
     "template_method": 2
   },
   "summary_by_confidence_level": {
-    "VERY_HIGH": 45,
+    "VERY_HIGH": 44,
     "HIGH": 7,
     "MEDIUM": 1,
     "LOW": 0
   },
   "detections": [
-    {
-      "pattern_type": "kiss",
-      "pattern_category": "principle",
-      "target_name": "run_power_loss_fault_injection_test",
-      "target_kind": "kiss_cyclomatic_complexity",
-      "confidence": {
-        "score": 0.88,
-        "level": "VERY_HIGH",
-        "percentage": "88%",
-        "evidences": [
-          {
-            "description": "Method 'run_power_loss_fault_injection_test' has high cyclomatic complexity (10 branch points), violating KISS",
-            "weight": 0.7,
-            "rule_code": "KISS_KISS_HIGH_CYCLOMATIC_COMPLEXITY",
-            "location": {
-              "file_path": "/Volumes/External/Code/littlefs_v2/src/example/power_loss_test.cpp",
-              "line": 1,
-              "column": 1,
-              "end_line": null,
-              "end_column": null,
-              "formatted": "/Volumes/External/Code/littlefs_v2/src/example/power_loss_test.cpp:1:1"
-            },
-            "snippet": null
-          },
-          {
-            "description": "Complex nested conditionals are difficult to test and maintain; decompose into smaller functions",
-            "weight": 0.35,
-            "rule_code": "KISS_KISS_DECOMPOSITION_NEEDED",
-            "location": {
-              "file_path": "/Volumes/External/Code/littlefs_v2/src/example/power_loss_test.cpp",
-              "line": 1,
-              "column": 1,
-              "end_line": null,
-              "end_column": null,
-              "formatted": "/Volumes/External/Code/littlefs_v2/src/example/power_loss_test.cpp:1:1"
-            },
-            "snippet": null
-          }
-        ]
-      },
-      "primary_location": {
-        "file_path": "/Volumes/External/Code/littlefs_v2/src/example/power_loss_test.cpp",
-        "line": 1,
-        "column": 1,
-        "end_line": null,
-        "end_column": null,
-        "formatted": "/Volumes/External/Code/littlefs_v2/src/example/power_loss_test.cpp:1:1"
-      },
-      "related_locations": [],
-      "summary": "KISS Violation (High Complexity): Method 'run_power_loss_fault_injection_test' has 10 control flow branches",
-      "evidences": [
-        {
-          "description": "Method 'run_power_loss_fault_injection_test' has high cyclomatic complexity (10 branch points), violating KISS",
-          "weight": 0.7,
-          "rule_code": "KISS_KISS_HIGH_CYCLOMATIC_COMPLEXITY",
-          "location": {
-            "file_path": "/Volumes/External/Code/littlefs_v2/src/example/power_loss_test.cpp",
-            "line": 1,
-            "column": 1,
-            "end_line": null,
-            "end_column": null,
-            "formatted": "/Volumes/External/Code/littlefs_v2/src/example/power_loss_test.cpp:1:1"
-          },
-          "snippet": null
-        },
-        {
-          "description": "Complex nested conditionals are difficult to test and maintain; decompose into smaller functions",
-          "weight": 0.35,
-          "rule_code": "KISS_KISS_DECOMPOSITION_NEEDED",
-          "location": {
-            "file_path": "/Volumes/External/Code/littlefs_v2/src/example/power_loss_test.cpp",
-            "line": 1,
-            "column": 1,
-            "end_line": null,
-            "end_column": null,
-            "formatted": "/Volumes/External/Code/littlefs_v2/src/example/power_loss_test.cpp:1:1"
-          },
-          "snippet": null
-        }
-      ]
-    },
     {
       "pattern_type": "kiss",
       "pattern_category": "principle",
