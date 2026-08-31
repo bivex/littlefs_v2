@@ -97,9 +97,13 @@ int main() {
 The project uses CMake with **Ninja** build system and presets:
 
 ```bash
-# Configure & build with Ninja via Presets
+# Option 1: Using CMake Presets (Ninja)
 cmake --preset default
 cmake --build --preset default
+
+# Option 2: Direct Ninja invocation
+cmake -B build -G Ninja
+ninja -C build
 
 # Run example
 ./build/example
